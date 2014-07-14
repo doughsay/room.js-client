@@ -1,0 +1,32 @@
+{
+  "name": "rjs-client",
+  "version": "0.0.0",
+  "author": "Chris Dosé <chris.dose@gmail.com>",
+  "description": "Room.js client.",
+  "scripts": {
+    "start": "gulp watch",
+    "build": "gulp build",
+    "deploy": "scp -r public/* chris@monty:/home/chris/sites/rjs-client/"
+  },
+  "dependencies": {
+    "knockout": "^3.1.0",
+    "socket.io-client": "^1.0.6",
+    "store": "^1.3.16"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-sass": "^0.7.2",
+    "gulp-jade": "^0.6.1",
+    "gulp-streamify": "0.0.5",
+    "gulp-uglify": "^0.3.1",
+    "gulp-util": "^2.2.20",
+    "gulp-livereload": "^2.1.0",
+    "vinyl-source-stream": "^0.1.1",
+    "browserify": "^4.2.0",
+    "connect": "^3.0.2",
+    "gulp-jshint": "^1.7.1",
+    "jshint-stylish": "^0.4.0",
+    "serve-static": "^1.3.2"
+  },
+  "license": "MIT"
+}
