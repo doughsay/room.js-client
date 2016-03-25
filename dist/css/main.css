@@ -1,0 +1,57 @@
+html {
+  font-family: 'Source Code Pro', sans-serif;
+  color: #D3D7CF;
+  background-color: black;
+}
+
+body {
+  margin: 0;
+}
+
+.terminal {
+  padding: 0 0.5em;
+}
+
+.terminal .screen {
+  font-size: 12pt;
+  /*overflow: auto;*/
+}
+
+.terminal .screen div {
+  white-space: pre-wrap;
+}
+
+.terminal .command form {
+  display: flex;
+  width: 100%;
+}
+
+.terminal .command form .prompt {
+  white-space: nowrap;
+}
+
+.terminal .command form input {
+  background-color: black;
+  color: #D3D7CF;
+
+  width: 100%;
+
+  margin: 0;
+  border: none;
+  padding: 0px;
+  padding-left: 7pt;
+
+  font-family: 'Source Code Pro', sans-serif;
+  font-size: 12pt;
+
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+}
+
+.terminal .command form input:focus {
+  outline: none;
+}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv='x-ua-compatible' content='ie=edge'>
+    <title>Room.js Client</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400'>
+    <link rel='stylesheet' href='css/main.css'>
+
+    <script>
+      var SERVER_URI = 'http://localhost:8888' // TODO: how to make this configurable?
+    </script>
+  </head>
+  <body data-bind='event: {keydown: onBodyKeyDown}'>
+    <!--[if lt IE 10]>
+        <p class='browserupgrade'>You are using an <strong>outdated</strong> browser. Please <a href='http://browsehappy.com/'>upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class='client'>
+      <div class='terminal'>
+        <div class='screen' data-bind='foreach: lines'>
+          <div data-bind='html: $data'></div>
+        </div>
+        <div class='command'>
+          <form data-bind='submit: sendCommand'>
+            <span class='prompt' data-bind='html: promptFormatted'></span><input autofocus=true data-bind="value: command, hasFocus: inputHasFocus, attr: {type: inputType}, event: {keydown: onRecall}"></input>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- exports bundle -->
+    <script src='js/bundle.js'></script>
+
+    <script>
+      (function() {
+        var ClientView = bundle.ClientView;
+        var ko = bundle.ko;
+
+        // exports io
+        document.write('<script src="' + SERVER_URI + '/socket.io/socket.io.js"><\/script>')
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var socket = io.connect(SERVER_URI);
+          ko.applyBindings(new ClientView(socket));
+        });
+      })();
+    </script>
+  </body>
+</html>
