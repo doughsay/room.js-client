@@ -1,0 +1,8 @@
+{
+  "name": "room.js-client",
+  "private": true,
+  "dependencies": {
+    "codemirror": "^5.13.2",
+    "knockout": "^3.4.0"
+  }
+}

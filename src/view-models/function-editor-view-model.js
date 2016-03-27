@@ -1,23 +1,33 @@
-import ko from 'knockout';
+/* global ko, CodeMirror */
 
 export class FunctionEditorViewModel {
-  constructor(parentViewModel, socket, data) {
+  constructor(parentViewModel, socket, { objectId, src, name }) {
     // Properties
 
     this.parentViewModel = parentViewModel;
     this.socket = socket;
-    this.objectId = data.objectId;
-    this.src = data.src;
-    this.name = data.name;
+    this.objectId = objectId;
+    this.src = src;
+    this.name = name;
+    this.codemirrorOptions = {
+      lineNumbers: true,
+      theme: 'tomorrow-night-bright',
+      tabSize: 2,
+      indentWithTabs: false,
+      extraKeys: {
+        Tab: (cm) => {
+          if (cm.doc.somethingSelected()) {
+            return CodeMirror.Pass;
+          }
+          return cm.execCommand('insertSoftTab');
+        },
+      },
+    };
 
     // Observables
 
     this.code = ko.observable(this.src);
     this._code = ko.observable(this.src);
-    this.aceBinding = {
-      session: ko.observable(),
-      value: this.code,
-    };
 
     // Computeds
 

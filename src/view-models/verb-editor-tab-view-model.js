@@ -1,13 +1,13 @@
-import ko from 'knockout';
+/* global ko */
 import VerbEditorViewModel from './verb-editor-view-model';
 
 export class VerbEditorTabViewModel {
-  constructor(parentView, socket, data) {
+  constructor(parentViewModel, socket, data) {
     // Properties
 
-    this.parentView = parentView;
-    this.templateId = 'editor';
-    this.view = new VerbEditorViewModel(this, socket, data);
+    this.parentViewModel = parentViewModel;
+    this.templateId = 'verb-editor';
+    this.viewModel = new VerbEditorViewModel(this, socket, data);
 
     // Observables
 
@@ -15,24 +15,26 @@ export class VerbEditorTabViewModel {
 
     // Computeds
 
-    this.active = ko.computed(() => parentView.activeTab() === this);
-    this.dirty = ko.computed(() => this.view.dirty());
+    this.active = ko.computed(() => parentViewModel.activeTab() === this);
+    this.dirty = ko.computed(() => this.viewModel.dirty());
   }
 
   select() {
-    this.parentView.activeTab(this);
-    // TODO: can we not?
-    window.setTimeout(() => {
-      // jiggle
-      this.parentViewModel.autoHeight(false);
-      this.parentViewModel.autoHeight(true);
-    }, 50);
+    this.parentViewModel.activeTab(this);
   }
 
   close() {
-    if (this.view.willClose()) {
-      this.parentView.closeTab(this);
+    if (this.viewModel.willClose()) {
+      this.parentViewModel.closeTab(this);
     }
+  }
+
+  tabPaneClasses() {
+    return ['tab-pane-editor', 'tab-pane-verb-editor'];
+  }
+
+  hideIfOnlyMe() {
+    return false;
   }
 }
 

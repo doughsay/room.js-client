@@ -1,4 +1,4 @@
-import ko from 'knockout';
+/* global ko */
 import ClientViewModel from './client-view-model';
 
 export class ClientTabViewModel {
@@ -25,17 +25,20 @@ export class ClientTabViewModel {
 
   select() {
     this.parentViewModel.activeTab(this);
-    // TODO: can we not?
-    window.setTimeout(() => {
-      this.viewModel.scrollToBottom();
-      this.viewModel.inputHasFocus(true);
-    }, 10);
   }
 
   close() {
     if (this.viewModel.willClose()) {
       this.parentViewModel.closeTab(this);
     }
+  }
+
+  tabPaneClasses() {
+    return ['tab-pane-client'];
+  }
+
+  hideIfOnlyMe() {
+    return true;
   }
 }
 

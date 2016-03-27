@@ -1,4 +1,4 @@
-import ko from 'knockout';
+/* global ko, io, SERVER_URI */
 const { observable, observableArray, computed } = ko;
 
 import { colorize, escapeHTML } from '../lib/html-helpers';
@@ -13,7 +13,7 @@ export class ClientViewModel {
     // Properties
 
     this.parentViewModel = parentViewModel;
-    this.socket = window.io.connect(window.SERVER_URI);
+    this.socket = io.connect(SERVER_URI);
     this.history = [];
     this.inputCallback = null;
 
@@ -254,7 +254,7 @@ export class ClientViewModel {
   }
 
   onEditVerb(data) {
-    this.parentViewModel.parentViewModel.newEditTab(this.socket, data);
+    this.parentViewModel.parentViewModel.newEditVerbTab(this.socket, data);
   }
 
   onEditFunction(data) {

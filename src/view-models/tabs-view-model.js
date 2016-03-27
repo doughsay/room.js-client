@@ -1,20 +1,7 @@
-import ko from 'knockout';
+/* global ko */
 import ClientTabViewModel from './client-tab-view-model';
 import VerbEditorTabViewModel from './verb-editor-tab-view-model';
 import FunctionEditorTabViewModel from './function-editor-tab-view-model';
-
-let aceLoaded = false;
-const aceSrc = 'http://rawgithub.com/ajaxorg/ace-builds/master/src/ace.js';
-
-function injectScript(src, done) {
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.async = true;
-  script.onload = done;
-  script.src = src;
-  document.getElementsByTagName('head')[0].appendChild(script);
-  aceLoaded = true;
-}
 
 export class TabsViewModel {
   constructor() {
@@ -22,8 +9,6 @@ export class TabsViewModel {
 
     this.activeTab = ko.observable();
     this.tabs = ko.observableArray([new ClientTabViewModel(this)]);
-    this.editorHasLoaded = ko.observable(false);
-    this.autoHeight = ko.observable(false);
 
     // Computeds
 
@@ -32,9 +17,8 @@ export class TabsViewModel {
     this.hidden = ko.computed(this.computeHidden.bind(this));
     this.visible = ko.computed(this.computeVisible.bind(this));
     this.tabPaneClasses = ko.computed(this.computeTabPaneClasses.bind(this));
-    this.templateBinding = ko.computed(this.computeTemplateBinding.bind(this));
-    this.editorVisible = ko.computed(this.computeEditorVisible.bind(this));
-    this.activeAceBinding = ko.computed(this.computeActiveAceBinding.bind(this));
+    this.templateBinding = ko.computed(this.computeTemplateBinding.bind(this))
+                           .extend({ throttle: 1 });
 
     // Initialization
 
@@ -55,7 +39,7 @@ export class TabsViewModel {
     const l = this.tabs().length;
     const t = this.tabs()[0];
 
-    return l === 0 || (l === 1 && t instanceof ClientTabViewModel);
+    return l === 0 || (l === 1 && t.hideIfOnlyMe());
   }
 
   computeVisible() {
@@ -64,16 +48,12 @@ export class TabsViewModel {
 
   computeTabPaneClasses() {
     const activeTab = this.activeTab();
-    const classes = [];
+    let classes;
 
     if (activeTab) {
-      if (activeTab instanceof ClientTabViewModel) {
-        classes.push('tab-pane-client');
-      } else if (activeTab instanceof VerbEditorTabViewModel) {
-        classes.push('tab-pane-editor', 'tab-pane-verb-editor');
-      } else if (activeTab instanceof FunctionEditorTabViewModel) {
-        classes.push('tab-pane-editor', 'tab-pane-function-editor');
-      }
+      classes = activeTab.tabPaneClasses();
+    } else {
+      classes = [];
     }
 
     if (this.visible()) {
@@ -87,24 +67,8 @@ export class TabsViewModel {
     return { name: this.activeTemplateId(), data: this.activeViewModel() };
   }
 
-  computeEditorVisible() {
-    const activeTab = this.activeTab();
-    return activeTab
-      ? (activeTab instanceof VerbEditorTabViewModel ||
-        activeTab instanceof FunctionEditorTabViewModel)
-      : false;
-  }
-
-  computeActiveAceBinding() {
-    const activeTab = this.activeTab();
-
-    if (activeTab && activeTab instanceof VerbEditorTabViewModel) {
-      return activeTab.viewModel.aceBinding;
-    } else if (activeTab && activeTab instanceof FunctionEditorTabViewModel) {
-      return activeTab.viewModel.aceBinding;
-    }
-
-    return false;
+  tabPaneClasses() {
+    return [];
   }
 
   newClientTab() {
@@ -113,35 +77,16 @@ export class TabsViewModel {
     newTab.select();
   }
 
-  // newEditTab(socket, data) {
-  //   var addTab = function() {
-  //     var newTab = new VerbEditorTabViewModel(this, socket, data)
-  //     this.tabs.push(newTab)
-  //     newTab.select()
-  //     this.editorHasLoaded(true)
-  //   }
-  //
-  //   if (!aceLoaded) {
-  //     injectScript(aceSrc, addTab)
-  //   }
-  //   else {
-  //     addTab()
-  //   }
-  // }
+  newEditVerbTab(socket, data) {
+    const newTab = new VerbEditorTabViewModel(this, socket, data);
+    this.tabs.push(newTab);
+    newTab.select();
+  }
 
   newEditFunctionTab(socket, data) {
-    const addTab = () => {
-      const newTab = new FunctionEditorTabViewModel(this, socket, data);
-      this.tabs.push(newTab);
-      newTab.select();
-      this.editorHasLoaded(true);
-    };
-
-    if (!aceLoaded) {
-      injectScript(aceSrc, addTab);
-    } else {
-      addTab();
-    }
+    const newTab = new FunctionEditorTabViewModel(this, socket, data);
+    this.tabs.push(newTab);
+    newTab.select();
   }
 
   closeTab(tab) {

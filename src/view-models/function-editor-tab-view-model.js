@@ -1,4 +1,4 @@
-import ko from 'knockout';
+/* global ko */
 import FunctionEditorViewModel from './function-editor-view-model';
 
 export class FunctionEditorTabViewModel {
@@ -21,18 +21,20 @@ export class FunctionEditorTabViewModel {
 
   select() {
     this.parentViewModel.activeTab(this);
-    // TODO: can we not?
-    window.setTimeout(() => {
-      // jiggle
-      this.parentViewModel.autoHeight(false);
-      this.parentViewModel.autoHeight(true);
-    }, 50);
   }
 
   close() {
     if (this.viewModel.willClose()) {
       this.parentViewModel.closeTab(this);
     }
+  }
+
+  tabPaneClasses() {
+    return ['tab-pane-editor', 'tab-pane-function-editor'];
+  }
+
+  hideIfOnlyMe() {
+    return false;
   }
 }
 
