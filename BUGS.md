@@ -4,6 +4,7 @@ BUGS:
 * maximum call stack side exceeded when no tabs open
 * multi-line colored text not working
 * you can add a function/verb on top of one that already exists
+* scroll to bottom of client on tab switch
 
 TODO:
 =====
@@ -20,3 +21,4 @@ IDEA:
 * clickable function/verb links that open editor tab
 * codemirror linting
 * command-p style fuzzy searching of functions/verbs
+* better alert/confirm?
