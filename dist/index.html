@@ -12,13 +12,23 @@
       var SERVER_URI = 'http://localhost:8888' // TODO: how to make this configurable?
     </script>
   </head>
-  <body data-bind='event: {keydown: onBodyKeyDown}'>
+  <body data-bind='event: {keydown: onKeyDown}'>
     <!--[if lt IE 10]>
         <p class='browserupgrade'>You are using an <strong>outdated</strong> browser. Please <a href='http://browsehappy.com/'>upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div class='client'>
-      <div class='terminal'>
+    <!-- No Tabs Template -->
+    <script id='no-tabs' type='text/html'>
+      <div class='client'>
+        <div class='screen'>
+          <div>You have no tabs open. Open a new <a href='#' data-bind='click: newClientTab'>client tab</a>to get started.</div>
+        </div>
+      </div>
+    </script>
+
+    <!-- Client Template -->
+    <script id='client' type='text/html'>
+      <div class='client'>
         <div class='screen' data-bind='foreach: lines'>
           <div data-bind='html: $data'></div>
         </div>
@@ -28,6 +38,21 @@
           </form>
         </div>
       </div>
+    </script>
+
+    <!-- Function Editor Template -->
+    <script id='function-editor' type='text/html'></script>
+
+    <ul class='tabs' data-bind='foreach: tabs, visible: visible'>
+      <li class='tab' data-bind='attr: {title: name}, css: {active: active, dirty: dirty}, click: select'>
+        <div class='tab-name' data-bind='text: name'></div>
+        <div class='tab-close-button' data-bind='click: close, clickBubble: false'></div>
+      </li>
+    </ul>
+    <div class='tab-pane' data-bind='template: templateBinding, css: tabPaneClasses'>
+    </div>
+    <div data-bind='if: editorHasLoaded'>
+      <div class='editor' data-bind='visible: editorVisible, autoHeight: autoHeight, ace: activeAceBinding'></div>
     </div>
 
     <!-- exports bundle -->
@@ -35,15 +60,20 @@
 
     <script>
       (function() {
-        var ClientView = bundle.ClientView;
+        var TabsViewModel = bundle.TabsViewModel;
         var ko = bundle.ko;
 
         // exports io
         document.write('<script src="' + SERVER_URI + '/socket.io/socket.io.js"><\/script>')
 
         document.addEventListener('DOMContentLoaded', function() {
-          var socket = io.connect(SERVER_URI);
-          ko.applyBindings(new ClientView(socket));
+          if (typeof io === 'undefined') {
+            alert('Unable to connect to ' + SERVER_URI);
+          } else {
+            // var socket = io.connect(SERVER_URI);
+            // ko.applyBindings(new ClientView(socket));
+            ko.applyBindings(new TabsViewModel());
+          }
         });
       })();
     </script>

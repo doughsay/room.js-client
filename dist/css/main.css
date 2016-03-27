@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 html {
   font-family: 'Source Code Pro', sans-serif;
   color: #D3D7CF;
@@ -8,29 +10,29 @@ body {
   margin: 0;
 }
 
-.terminal {
+body.padded {
+  padding-top: 32px;
+}
+
+.client .screen {
   padding: 0 0.5em;
-}
-
-.terminal .screen {
   font-size: 12pt;
-  /*overflow: auto;*/
 }
 
-.terminal .screen div {
+.client .screen div {
   white-space: pre-wrap;
 }
 
-.terminal .command form {
+.client .command form {
   display: flex;
   width: 100%;
 }
 
-.terminal .command form .prompt {
+.client .command form .prompt {
   white-space: nowrap;
 }
 
-.terminal .command form input {
+.client .command form input {
   background-color: black;
   color: #D3D7CF;
 
@@ -52,6 +54,79 @@ body {
   -moz-box-shadow: none !important;
 }
 
-.terminal .command form input:focus {
+.client .command form input:focus {
   outline: none;
+}
+
+/* Tabs */
+
+.tabs {
+  position: fixed;
+  top: 0;
+  margin: 0;
+  background: #1d1f21;
+  width: 100%;
+  height: 32px;
+  padding: 0;
+  display: table;
+  table-layout: fixed;
+  -webkit-transform: scale(1);
+}
+
+.tabs .tab {
+  text-align: center;
+  color: #545657;
+  background: #141516;
+  display: table-cell;
+  width: 100%;
+  height: 32px;
+  line-height: 32px;
+  box-sizing: border-box;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid #2c2e30;
+  padding-left: 20px;
+  padding-right: 20px;
+  position: relative;
+}
+
+.tabs .tab.active {
+  color: #ffffff;
+  background: black;
+  border-top: 1px solid #2c2e30;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid #2c2e30;
+  border-right: 1px solid #2c2e30;
+}
+
+.tabs .tab .tab-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tabs .tab .tab-close-button {
+  top: 8px;
+  height: 16px;
+  line-height: 16px;
+  width: 16px;
+  left: 8px;
+  right: auto;
+  position: absolute;
+  transform: scale(0);
+  opacity: 0;
+}
+
+.tabs .tab .tab-close-button:before {
+  content: '✕';
+}
+
+.tabs .tab:hover .tab-close-button {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.tab-pane.tabs-visible {
+  margin-top: 32px;
 }

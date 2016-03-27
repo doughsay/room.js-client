@@ -21,7 +21,7 @@ export default {
       include: 'node_modules/**',
     }),
 
-    uglify(),
+    // uglify(),
   ],
   dest: 'dist/js/bundle.js',
   moduleName: 'bundle',

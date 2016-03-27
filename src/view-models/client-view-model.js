@@ -1,19 +1,19 @@
 import ko from 'knockout';
 const { observable, observableArray, computed } = ko;
 
-import { colorize, escapeHTML } from './html-helpers';
-import { boldRed, boldGreen, gray } from './colors';
+import { colorize, escapeHTML } from '../lib/html-helpers';
+import { boldRed, boldGreen, gray } from '../lib/colors';
 
-export class ClientView {
-  constructor(socket) {
+export class ClientViewModel {
+  constructor(parentViewModel) {
     // Elements
 
     this.$body = document.querySelector('body');
-    this.$input = document.querySelector('.command input');
 
     // Properties
 
-    this.socket = socket;
+    this.parentViewModel = parentViewModel;
+    this.socket = window.io.connect(window.SERVER_URI);
     this.history = [];
     this.inputCallback = null;
 
@@ -45,17 +45,21 @@ export class ClientView {
 
     // Socket Setup
 
-    socket.on('connect', this.onConnect.bind(this));
-    socket.on('connecting', this.onConnecting.bind(this));
-    socket.on('disconnect', this.onDisconnect.bind(this));
-    socket.on('connect_failed', this.onConnectFailed.bind(this));
-    socket.on('error', this.onError.bind(this));
-    socket.on('reconnect_failed', this.onReconnectFailed.bind(this));
-    socket.on('reconnect', this.onReconnect.bind(this));
-    socket.on('reconnecting', this.onReconnecting.bind(this));
-    socket.on('output', this.onOutput.bind(this));
-    socket.on('set-prompt', this.onSetPrompt.bind(this));
-    socket.on('request-input', this.onRequestInput.bind(this));
+    this.socket.on('connect', this.onConnect.bind(this));
+    this.socket.on('connecting', this.onConnecting.bind(this));
+    this.socket.on('disconnect', this.onDisconnect.bind(this));
+    this.socket.on('connect_failed', this.onConnectFailed.bind(this));
+    this.socket.on('error', this.onError.bind(this));
+    this.socket.on('reconnect_failed', this.onReconnectFailed.bind(this));
+    this.socket.on('reconnect', this.onReconnect.bind(this));
+    this.socket.on('reconnecting', this.onReconnecting.bind(this));
+    this.socket.on('output', this.onOutput.bind(this));
+    this.socket.on('set-prompt', this.onSetPrompt.bind(this));
+    this.socket.on('request-input', this.onRequestInput.bind(this));
+    this.socket.on('edit-verb', this.onEditVerb.bind(this));
+    this.socket.on('edit-function', this.onEditFunction.bind(this));
+
+    this.addLine(gray('Connecting...'));
   }
 
   composedPrompt(optionalStr = '') {
@@ -103,13 +107,15 @@ export class ClientView {
 
   handleClientCommand(command) {
     switch (command) {
-      case '#clear': this.lines([]); return true;
-      case '#connect': this.reconnectSocket(); return true;
-      case '#disconnect': this.disconnectSocket(); return true;
-      case '#echo on': this.echo(true); return true;
-      case '#echo off': this.echo(false); return true;
-      case '#space on': this.space(true); return true;
-      case '#space off': this.space(false); return true;
+      case '.clear': this.lines([]); return true;
+      case '.connect': this.reconnectSocket(); return true;
+      case '.disconnect': this.disconnectSocket(); return true;
+      case '.echo on': this.echo(true); return true;
+      case '.echo off': this.echo(false); return true;
+      case '.space on': this.space(true); return true;
+      case '.space off': this.space(false); return true;
+      case '.new tab': this.parentViewModel.parentViewModel.newClientTab(); return true;
+      case '.close tab': this.parentViewModel.close(); return true;
       default: return false;
     }
   }
@@ -155,17 +161,23 @@ export class ClientView {
 
   truncateLines() {
     const lengthDiff = this.lines().length - this.maxLines();
-    this.lines(this.lines.slice(lengthDiff))
+    this.lines(this.lines.slice(lengthDiff));
+  }
+
+  willClose() {
+    this.socket.disconnect();
+    return true;
   }
 
   // Event handlers
 
-  onBodyKeyDown(_, event) {
+  onKeyDown(_, event) {
     const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
     const meta = event.metaKey;
     const ctrl = event.ctrlKey;
     const vKey = key === 86;
     const upKey = key === 38;
+    const downKey = key === 40;
 
     // if holding control or command and not trying to paste,
     // ignore this keypress
@@ -175,15 +187,11 @@ export class ClientView {
     // otherwise, re-focus the input before the key is let up
     if (!this.inputHasFocus()) {
       this.inputHasFocus(true);
-      // when hitting up and not focused,
+      // when hitting up or down and not focused,
       // the keydown event doesn't get passed on
-      if (upKey) {
+      if (upKey || downKey) {
         // HACK fake event object
-        // TODO find a better way to do this
-        return this.onRecall(null, {
-          which: key,
-          target: this.$input,
-        });
+        return this.onRecall(null, { which: key });
       }
     }
     return true;
@@ -198,8 +206,6 @@ export class ClientView {
           this.currentHistory++;
         }
         this.command(this.history[this.currentHistory]);
-        const l = this.command().length;
-        event.target.setSelectionRange(l, l);
         return false;
       }
       case 40: { // down key
@@ -247,6 +253,14 @@ export class ClientView {
     this.setPrompt(str);
   }
 
+  onEditVerb(data) {
+    this.parentViewModel.parentViewModel.newEditTab(this.socket, data);
+  }
+
+  onEditFunction(data) {
+    this.parentViewModel.parentViewModel.newEditFunctionTab(this.socket, data);
+  }
+
   onRequestInput(inputs, fn) {
     const promptWas = this.promptStr();
     this.getInputFromUser({}, inputs, (formData) => {
@@ -271,4 +285,4 @@ export class ClientView {
   }
 }
 
-export default ClientView;
+export default ClientViewModel;
