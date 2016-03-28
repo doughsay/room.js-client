@@ -12,22 +12,15 @@ export class TabsViewModel {
 
     // Computeds
 
-    this.activeTemplateId = ko.computed(this.computeActiveTemplateId.bind(this));
     this.activeViewModel = ko.computed(this.computeActiveViewModel.bind(this));
     this.hidden = ko.computed(this.computeHidden.bind(this));
     this.visible = ko.computed(this.computeVisible.bind(this));
     this.tabPaneClasses = ko.computed(this.computeTabPaneClasses.bind(this));
-    this.templateBinding = ko.computed(this.computeTemplateBinding.bind(this))
-                           .extend({ throttle: 1 });
+    this.templateBinding = ko.computed(this.computeTemplateBinding.bind(this));
 
     // Initialization
 
     this.activeTab(this.tabs()[0]);
-  }
-
-  computeActiveTemplateId() {
-    const activeTab = this.activeTab();
-    return activeTab ? activeTab.templateId : 'no-tabs';
   }
 
   computeActiveViewModel() {
@@ -64,7 +57,11 @@ export class TabsViewModel {
   }
 
   computeTemplateBinding() {
-    return { name: this.activeTemplateId(), data: this.activeViewModel() };
+    const activeTab = this.activeTab();
+    if (activeTab) {
+      return activeTab.templateBinding();
+    }
+    return { name: 'no-tabs', data: this };
   }
 
   tabPaneClasses() {

@@ -19,6 +19,10 @@ export class VerbEditorTabViewModel {
     this.dirty = ko.computed(() => this.viewModel.dirty());
   }
 
+  templateBinding() {
+    return { name: this.templateId, data: this.viewModel };
+  }
+
   select() {
     this.parentViewModel.activeTab(this);
   }

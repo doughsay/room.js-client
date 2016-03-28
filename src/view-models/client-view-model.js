@@ -175,15 +175,18 @@ export class ClientViewModel {
     const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
     const meta = event.metaKey;
     const ctrl = event.ctrlKey;
+    const shift = event.shiftKey;
     const vKey = key === 86;
     const upKey = key === 38;
     const downKey = key === 40;
+    const tabKey = key === 9;
 
     // if holding control or command and not trying to paste,
     // ignore this keypress
     if ((meta && !vKey) || (ctrl && !vKey)) {
       return true;
     }
+
     // otherwise, re-focus the input before the key is let up
     if (!this.inputHasFocus()) {
       this.inputHasFocus(true);
@@ -194,6 +197,13 @@ export class ClientViewModel {
         return this.onRecall(null, { which: key });
       }
     }
+
+    if (tabKey) {
+      const direction = shift ? -1 : 1;
+      this.socket.emit('tab-key-press', { direction });
+      return false;
+    }
+
     return true;
   }
 

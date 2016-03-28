@@ -1,10 +1,8 @@
 BUGS:
 =====
 
-* maximum call stack side exceeded when no tabs open
 * multi-line colored text not working
 * you can add a function/verb on top of one that already exists
-* scroll to bottom of client on tab switch
 
 TODO:
 =====

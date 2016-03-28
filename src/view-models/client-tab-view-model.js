@@ -19,12 +19,18 @@ export class ClientTabViewModel {
     this.active = ko.computed(this.computeActive.bind(this));
   }
 
+  templateBinding() {
+    return { name: this.templateId, data: this.viewModel };
+  }
+
   computeActive() {
     return this.parentViewModel.activeTab() === this;
   }
 
   select() {
     this.parentViewModel.activeTab(this);
+    this.viewModel.scrollToBottom();
+    this.viewModel.inputHasFocus(true);
   }
 
   close() {
