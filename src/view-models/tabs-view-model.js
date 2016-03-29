@@ -2,6 +2,7 @@
 import ClientTabViewModel from './client-tab-view-model';
 import VerbEditorTabViewModel from './verb-editor-tab-view-model';
 import FunctionEditorTabViewModel from './function-editor-tab-view-model';
+import SearchViewModel from './search-view-model';
 
 export class TabsViewModel {
   constructor() {
@@ -9,6 +10,7 @@ export class TabsViewModel {
 
     this.activeTab = ko.observable();
     this.tabs = ko.observableArray([new ClientTabViewModel(this)]);
+    this.searchViewModel = ko.observable();
 
     // Computeds
 
@@ -17,6 +19,7 @@ export class TabsViewModel {
     this.visible = ko.computed(this.computeVisible.bind(this));
     this.tabPaneClasses = ko.computed(this.computeTabPaneClasses.bind(this));
     this.templateBinding = ko.computed(this.computeTemplateBinding.bind(this));
+    this.activeSocket = ko.computed(this.computeActiveSocket.bind(this));
 
     // Initialization
 
@@ -24,6 +27,10 @@ export class TabsViewModel {
   }
 
   computeActiveViewModel() {
+    const searchViewModel = this.searchViewModel();
+    if (searchViewModel) {
+      return searchViewModel;
+    }
     const activeTab = this.activeTab();
     return activeTab ? activeTab.viewModel : this;
   }
@@ -64,6 +71,11 @@ export class TabsViewModel {
     return { name: 'no-tabs', data: this };
   }
 
+  computeActiveSocket() {
+    const activeViewModel = this.activeViewModel();
+    return activeViewModel.socket;
+  }
+
   tabPaneClasses() {
     return [];
   }
@@ -101,6 +113,18 @@ export class TabsViewModel {
 
   onKeyDown(...args) {
     const activeViewModel = this.activeViewModel();
+    const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
+    const meta = event.metaKey;
+    const ctrl = event.ctrlKey;
+    const pKey = key === 80;
+
+    // open the search box on cmd+p (or ctrl+p) if it's not already open
+    if ((meta && pKey) || (ctrl && pKey)) {
+      if (!this.searchViewModel()) {
+        this.searchViewModel(new SearchViewModel(this, this.activeSocket()));
+      }
+      return false;
+    }
 
     if (activeViewModel && activeViewModel.onKeyDown) {
       return activeViewModel.onKeyDown.apply(activeViewModel, args);

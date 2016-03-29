@@ -18,5 +18,4 @@ IDEA:
   * last seen line?
 * clickable function/verb links that open editor tab
 * codemirror linting
-* command-p style fuzzy searching of functions/verbs
 * better alert/confirm?

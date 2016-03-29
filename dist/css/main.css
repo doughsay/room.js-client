@@ -77,6 +77,7 @@ body {
 }
 
 .tabs .tab {
+  cursor: default;
   text-align: center;
   color: #545657;
   background: #141516;
@@ -178,4 +179,58 @@ body {
 .CodeMirror {
   font-family: 'Source Code Pro', monospace !important;
   height: auto !important;
+}
+
+/* Search Box */
+
+.search {
+  position: absolute;
+  top: 20vh;
+  left: 50%;
+  z-index: 9999;
+  box-sizing: border-box;
+  width: 680px;
+  margin-left: -340px;
+  border: 1px solid #2c2e30;
+}
+
+.search .searchbox {
+  background-color: black;
+  padding: 0.5em;
+}
+
+.search .searchbox input {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 18pt;
+  color: white;
+  background-color: black;
+  border: none;
+  width: 100%;
+}
+
+.search .searchbox input:focus {
+  outline: none;
+}
+
+.search .results {
+  border-top: 1px solid #2c2e30;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.search .results ol {
+  margin: 0;
+  padding: 0;
+}
+
+.search .results ol li {
+  list-style-type: none;
+  padding: 1em 0.5em;
+  color: #545657;
+  background-color: black;
+}
+
+.search .results ol li.active {
+  color: white;
+  background-color: #141516;
 }

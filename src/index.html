@@ -106,6 +106,20 @@
     <div class='tab-pane' data-bind='template: templateBinding, css: tabPaneClasses'>
     </div>
 
+    <div data-bind='with: searchViewModel'>
+      <div class='search'>
+        <div class='searchbox'>
+          <input data-bind='hasFocus: inputHasFocus, textInput: search' type='text'>
+        </div>
+        <div class='results' data-bind='visible: hasResults'>
+          <ol data-bind='foreach: results'>
+            <!-- <li class='active'>Root.tell</li> -->
+            <li data-bind='text: name, css: {active: active}'></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
     <!-- exports global ko -->
     <script src='js/knockout.js'></script>
 
