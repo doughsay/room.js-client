@@ -184,7 +184,7 @@ body {
 /* Search Box */
 
 .search {
-  position: absolute;
+  position: fixed;
   top: 20vh;
   left: 50%;
   z-index: 9999;

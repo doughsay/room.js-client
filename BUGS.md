@@ -1,7 +1,6 @@
 BUGS:
 =====
 
-* multi-line colored text not working
 * you can add a function/verb on top of one that already exists
 
 TODO:

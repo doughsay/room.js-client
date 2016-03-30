@@ -131,10 +131,6 @@ export class ClientViewModel {
     this.scrollToBottom();
   }
 
-  addLines(lines) {
-    lines.forEach((line) => { this.addLine(line); });
-  }
-
   disconnectSocket() {
     if (this.socket.connected) {
       this.socket.disconnect();
@@ -254,9 +250,10 @@ export class ClientViewModel {
   onReconnecting() {}
 
   onOutput(msg) {
-    const lines = msg.split('\n');
-    this.addLines(lines);
-    if (this.space()) { this.addLine(' '); }
+    if (msg && msg.toString) {
+      this.addLine(msg.toString());
+      if (this.space()) { this.addLine(' '); }
+    }
   }
 
   onSetPrompt(str) {
