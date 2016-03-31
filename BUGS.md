@@ -2,6 +2,7 @@ BUGS:
 =====
 
 * you can add a function/verb on top of one that already exists
+* bold leaks when printing verbs in client
 
 TODO:
 =====
