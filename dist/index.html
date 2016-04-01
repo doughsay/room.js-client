@@ -15,7 +15,7 @@
       var SERVER_URI = 'http://localhost:8888' // TODO: how to make this configurable?
     </script>
   </head>
-  <body data-bind='event: {keydown: onKeyDown}'>
+  <body class='cloak' data-bind='event: {keydown: onKeyDown}, uncloak: true'>
     <!--[if lt IE 10]>
         <p class='browserupgrade'>You are using an <strong>outdated</strong> browser. Please <a href='http://browsehappy.com/'>upgrade your browser</a> to improve your experience.</p>
     <![endif]-->

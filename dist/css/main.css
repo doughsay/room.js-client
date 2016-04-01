@@ -11,6 +11,10 @@ body {
   margin: 0;
 }
 
+.cloak {
+  display: none;
+}
+
 /* Client */
 
 .client {
