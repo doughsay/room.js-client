@@ -126,7 +126,7 @@ export class TabsViewModel {
       return false;
     }
 
-    if (activeViewModel && activeViewModel.onKeyDown) {
+    if (activeViewModel !== this && activeViewModel.onKeyDown) {
       return activeViewModel.onKeyDown.apply(activeViewModel, args);
     }
     return true;
@@ -135,7 +135,7 @@ export class TabsViewModel {
   onKeyUp(...args) {
     const activeViewModel = this.activeViewModel();
 
-    if (activeViewModel && activeViewModel.onKeyUp) {
+    if (activeViewModel !== this && activeViewModel.onKeyUp) {
       return activeViewModel.onKeyUp.apply(activeViewModel, args);
     }
     return true;

@@ -1,9 +1,3 @@
-TODO:
-=====
-
-* better color styles
-* style anchor tags
-
 IDEA:
 =====
 
