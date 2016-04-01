@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "tango-dark.css";
 
 html {
   font-family: 'Source Code Pro', monospace;

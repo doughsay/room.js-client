@@ -7,6 +7,7 @@ cp src/index.html dist/index.html
 # copy css
 mkdir -p dist/css
 cp src/css/main.css dist/css/
+cp src/css/tango-dark.css dist/css/
 
 # copy bower deps
 mkdir -p dist/js
