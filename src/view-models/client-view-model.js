@@ -35,11 +35,11 @@ export class ClientViewModel {
 
     // Subscribers
 
-    this.maxLines.subscribe((max) => {
+    this.maxLines.subscribe(max => {
       if (this.lines().length > max) { this.truncateLines(); }
     });
 
-    this.maxHistory.subscribe((max) => {
+    this.maxHistory.subscribe(max => {
       if (history().length > max) { this.truncateHistory(); }
     });
 
@@ -270,7 +270,7 @@ export class ClientViewModel {
 
   onRequestInput(inputs, fn) {
     const promptWas = this.promptStr();
-    this.getInputFromUser({}, inputs, (formData) => {
+    this.getInputFromUser({}, inputs, formData => {
       this.setPrompt(promptWas, 'text');
       fn(formData);
     });
@@ -285,7 +285,7 @@ export class ClientViewModel {
 
     this.setPrompt(input.label || 'input', input.type || 'text');
 
-    this.inputCallback = (userInput) => {
+    this.inputCallback = userInput => {
       data[input.name || 'input'] = userInput;
       this.getInputFromUser(data, restInputs, done);
     };

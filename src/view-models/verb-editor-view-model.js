@@ -14,7 +14,7 @@ export class VerbEditorViewModel {
       tabSize: 2,
       indentWithTabs: false,
       extraKeys: {
-        Tab: (cm) => {
+        Tab: cm => {
           if (cm.doc.somethingSelected()) {
             return CodeMirror.Pass;
           }
@@ -66,6 +66,7 @@ export class VerbEditorViewModel {
     };
 
     if (!this.socket.connected) {
+      // eslint-disable-next-line no-alert
       window.alert([
         'The client tab that this editor was opened from has been',
         'closed.  You must keep that open for saving to work.',
@@ -73,7 +74,7 @@ export class VerbEditorViewModel {
       return;
     }
 
-    this.socket.emit('save-verb', params, (response) => {
+    this.socket.emit('save-verb', params, response => {
       if (response === 'saved') {
         this._pattern(this.pattern());
         this._dobjarg(this.dobjarg());
@@ -81,6 +82,7 @@ export class VerbEditorViewModel {
         this._iobjarg(this.iobjarg());
         this._code(this.code());
       } else {
+        // eslint-disable-next-line no-alert
         window.alert(response);
       }
     });
@@ -93,6 +95,7 @@ export class VerbEditorViewModel {
     ].join(' ');
 
     return this.dirty()
+      // eslint-disable-next-line no-alert
       ? window.confirm(msg)
       : true;
   }

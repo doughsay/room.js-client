@@ -47,7 +47,7 @@ class FunctionSearchResult extends SearchResult {
 
   openEditor(socket, tabsViewModel) {
     const params = { objectId: this.objectId, name: this.data.function };
-    socket.emit('get-function', params, (data) => {
+    socket.emit('get-function', params, data => {
       tabsViewModel.newEditFunctionTab(socket, data);
     });
   }
@@ -60,7 +60,7 @@ class VerbSearchResult extends SearchResult {
 
   openEditor(socket, tabsViewModel) {
     const params = { objectId: this.objectId, name: this.data.verb };
-    socket.emit('get-verb', params, (data) => {
+    socket.emit('get-verb', params, data => {
       tabsViewModel.newEditVerbTab(socket, data);
     });
   }
@@ -89,7 +89,7 @@ export class SearchViewModel {
     const selectedIndex = this.selectedIndex();
 
     if (results.length > 0) {
-      results.forEach((result) => { result.active(false); });
+      results.forEach(result => { result.active(false); });
       results[selectedIndex].active(true);
       this.scrollActiveResultIntoView();
       return results[selectedIndex];
@@ -115,9 +115,9 @@ export class SearchViewModel {
   }
 
   onSearch(str) {
-    this.socket.emit('search', str, (results) => {
+    this.socket.emit('search', str, results => {
       this.selectedIndex(0);
-      this.results(results.map((result) => SearchResult.newFromResult(result)));
+      this.results(results.map(result => SearchResult.newFromResult(result)));
     });
   }
 

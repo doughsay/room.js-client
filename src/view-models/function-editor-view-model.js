@@ -15,7 +15,7 @@ export class FunctionEditorViewModel {
       tabSize: 2,
       indentWithTabs: false,
       extraKeys: {
-        Tab: (cm) => {
+        Tab: cm => {
           if (cm.doc.somethingSelected()) {
             return CodeMirror.Pass;
           }
@@ -42,6 +42,7 @@ export class FunctionEditorViewModel {
     };
 
     if (!this.socket.connected) {
+      // eslint-disable-next-line no-alert
       window.alert([
         'The client tab that this editor was opened from has been',
         'closed.  You must keep that open for saving to work.',
@@ -49,10 +50,11 @@ export class FunctionEditorViewModel {
       return;
     }
 
-    this.socket.emit('save-function', params, (response) => {
+    this.socket.emit('save-function', params, response => {
       if (response === 'saved') {
         this._code(this.code());
       } else {
+        // eslint-disable-next-line no-alert
         window.alert(response);
       }
     });
@@ -65,6 +67,7 @@ export class FunctionEditorViewModel {
     ].join(' ');
 
     return this.dirty()
+      // eslint-disable-next-line no-alert
       ? window.confirm(msg)
       : true;
   }

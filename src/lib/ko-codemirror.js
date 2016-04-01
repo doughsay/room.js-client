@@ -5,7 +5,7 @@ function init(element, valueAccessor, allBindings) {
   options.value = ko.unwrap(valueAccessor());
   const editor = CodeMirror(element, options); // eslint-disable-line new-cap
 
-  editor.on('change', (cm) => {
+  editor.on('change', cm => {
     const value = valueAccessor();
     value(cm.getValue());
   });
