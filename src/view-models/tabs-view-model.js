@@ -112,6 +112,7 @@ export class TabsViewModel {
   }
 
   onKeyDown(...args) {
+    const event = args[1];
     const activeViewModel = this.activeViewModel();
     const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
     const meta = event.metaKey;
