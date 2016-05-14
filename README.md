@@ -1,3 +1,9 @@
-# Room.js Client
+Room.js Client
+==============
 
 This is the Room.js client app.
+
+Demo
+====
+
+http://roomjs.tk/

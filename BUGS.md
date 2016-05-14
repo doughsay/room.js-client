@@ -1,6 +1,14 @@
+BUGS:
+=====
+
+* Links aren't linkifying correctly
+* Links take you away from the game, logging you out
+
 IDEA:
 =====
 
+* render markdown?
+* clickable commands?
 * dirty tab styling for clients when messages received you haven't seen
   * last seen line?
 * clickable function/verb links that open editor tab
