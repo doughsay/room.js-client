@@ -19,6 +19,8 @@ mkdir -p dist/css
 cp bower_components/codemirror/lib/codemirror.css dist/css/
 mkdir -p dist/css/codemirror/themes
 cp bower_components/codemirror/theme/tomorrow-night-bright.css dist/css/codemirror/themes/
+cp bower_components/linkifyjs/linkify.js dist/js/
+cp bower_components/linkifyjs/linkify-html.js dist/js/
 
 # build bundle
 ./node_modules/.bin/rollup -c

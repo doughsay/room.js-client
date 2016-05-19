@@ -1,9 +1,3 @@
-BUGS:
-=====
-
-* Links aren't linkifying correctly
-* Links take you away from the game, logging you out
-
 IDEA:
 =====
 
