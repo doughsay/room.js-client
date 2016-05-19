@@ -203,6 +203,19 @@ export class ClientViewModel {
     return true;
   }
 
+  onClick(_, event) {
+    if (event.target && event.target.hash) {
+      const pattern = /#cmd\[(.*?)\]/g;
+      const match = pattern.exec(event.target.hash);
+      if (!match) { return true; }
+      const command = match[1];
+      this.command(command);
+      this.sendCommand();
+      return false;
+    }
+    return true;
+  }
+
   onRecall(_, event) {
     const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
     if (this.history.length === 0) { return true; }

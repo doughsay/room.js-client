@@ -2,7 +2,6 @@ IDEA:
 =====
 
 * render markdown?
-* clickable commands?
 * dirty tab styling for clients when messages received you haven't seen
   * last seen line?
 * clickable function/verb links that open editor tab
