@@ -2,7 +2,7 @@
 @import "tango-dark.css";
 
 html {
-  font-family: 'Source Code Pro', monospace;
+  font-family: 'Fira Mono', monospace;
   color: #D3D7CF;
   background-color: black;
 }
@@ -50,7 +50,7 @@ body {
   padding: 0px;
   padding-left: 7pt;
 
-  font-family: 'Source Code Pro', monospace;
+  font-family: 'Fira Mono', monospace;
   font-size: 12pt;
 
   border-radius: 0;
@@ -176,13 +176,13 @@ body {
 }
 
 .verb-editor-palette input, .verb-editor-palette select, .verb-editor-palette option {
-  font-family: 'Source Code Pro', monospace;
+  font-family: 'Fira Mono', monospace;
   font-size: 12pt;
 }
 
 /* CodeMirror Overrides */
 .CodeMirror {
-  font-family: 'Source Code Pro', monospace !important;
+  font-family: 'Fira Mono', monospace !important;
   height: auto !important;
 }
 
@@ -205,7 +205,7 @@ body {
 }
 
 .search .searchbox input {
-  font-family: 'Source Code Pro', monospace;
+  font-family: 'Fira Mono', monospace;
   font-size: 18pt;
   color: white;
   background-color: black;

@@ -22,5 +22,8 @@ cp bower_components/codemirror/theme/tomorrow-night-bright.css dist/css/codemirr
 cp bower_components/linkifyjs/linkify.js dist/js/
 cp bower_components/linkifyjs/linkify-html.js dist/js/
 
+# copy favicons
+cp src/favicons/* dist/
+
 # build bundle
 ./node_modules/.bin/rollup -c
