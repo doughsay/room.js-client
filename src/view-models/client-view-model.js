@@ -4,6 +4,16 @@ const { observable, observableArray, computed } = ko;
 import { colorize, escapeHTML } from '../lib/html-helpers';
 import { boldRed, boldGreen, gray } from '../lib/colors';
 
+function readConfig(key) {
+  return window.localStorage ? JSON.parse(window.localStorage.getItem(key)) : null;
+}
+
+function writeConfig(key, value) {
+  if (window.localStorage) {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }
+}
+
 export class ClientViewModel {
   constructor(parentViewModel) {
     // Elements
@@ -23,11 +33,13 @@ export class ClientViewModel {
     this.command = observable('');
     this.inputType = observable('text');
     this.promptStr = observable('');
-    this.maxLines = observable(1000);
-    this.maxHistory = observable(1000);
-    this.echo = observable(false);
-    this.space = observable(false);
     this.inputHasFocus = observable(true);
+
+    // client config
+    this.maxLines = observable(readConfig('maxLines') || 1000);
+    this.maxHistory = observable(readConfig('maxHistory') || 1000);
+    this.echo = observable(readConfig('echo') || false);
+    this.space = observable(readConfig('space') || false);
 
     // Computeds
 
@@ -42,6 +54,9 @@ export class ClientViewModel {
     this.maxHistory.subscribe(max => {
       if (history().length > max) { this.truncateHistory(); }
     });
+
+    this.echo.subscribe(echo => { writeConfig('echo', echo); });
+    this.space.subscribe(space => { writeConfig('space', space); });
 
     // Socket Setup
 

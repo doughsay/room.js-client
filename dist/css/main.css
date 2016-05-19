@@ -36,7 +36,7 @@ body {
 }
 
 .client .command form .prompt {
-  white-space: nowrap;
+  white-space: pre;
 }
 
 .client .command form input {
