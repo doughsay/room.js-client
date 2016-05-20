@@ -158,8 +158,9 @@
           if (typeof io === 'undefined') {
             alert('Unable to connect to ' + SERVER_URI);
           } else {
-            ko.applyBindings(new TabsViewModel());
-            addSaneOnUnloadHandler(() => window.loggedIn);
+            const viewModel = new TabsViewModel();
+            ko.applyBindings(viewModel);
+            addSaneOnUnloadHandler(() => viewModel.anyTabLoggedIn());
           }
         });
       })();

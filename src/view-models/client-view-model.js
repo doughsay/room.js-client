@@ -34,6 +34,8 @@ export class ClientViewModel {
     this.inputType = observable('text');
     this.promptStr = observable('');
     this.inputHasFocus = observable(true);
+    this.loggedIn = observable(false);
+    this.playing = observable(false);
 
     // client config
     this.maxLines = observable(readConfig('maxLines') || 1000);
@@ -273,6 +275,8 @@ export class ClientViewModel {
     this.addLine(boldRed('Disconnected from server.'));
     this.setPrompt('');
     this.inputCallback = null;
+    this.loggedIn(false);
+    this.playing(false);
   }
 
   onConnectFailed() { this.addLine(boldRed('Connection to server failed.')); }
@@ -301,19 +305,19 @@ export class ClientViewModel {
   }
 
   onLogin() {
-    window.loggedIn = true;
+    this.loggedIn(true);
   }
 
   onLogout() {
-    window.loggedIn = false;
+    this.loggedIn(false);
   }
 
   onPlaying() {
-    // noop
+    this.playing(true);
   }
 
   onQuit() {
-    // noop
+    this.playing(false);
   }
 
   onRequestInput(inputs, fn) {

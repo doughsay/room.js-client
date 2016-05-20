@@ -20,6 +20,7 @@ export class TabsViewModel {
     this.tabPaneClasses = ko.computed(this.computeTabPaneClasses.bind(this));
     this.templateBinding = ko.computed(this.computeTemplateBinding.bind(this));
     this.activeSocket = ko.computed(this.computeActiveSocket.bind(this));
+    this.anyTabLoggedIn = ko.computed(this.computedAnyTabLoggedIn.bind(this));
 
     // Initialization
 
@@ -74,6 +75,12 @@ export class TabsViewModel {
   computeActiveSocket() {
     const activeViewModel = this.activeViewModel();
     return activeViewModel.socket;
+  }
+
+  computedAnyTabLoggedIn() {
+    return this.tabs().reduce((result, tab) =>
+      result || (tab.viewModel && tab.viewModel.loggedIn && tab.viewModel.loggedIn())
+    , false);
   }
 
   tabPaneClasses() {
