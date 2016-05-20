@@ -73,6 +73,10 @@ export class ClientViewModel {
     this.socket.on('request-input', this.onRequestInput.bind(this));
     this.socket.on('edit-verb', this.onEditVerb.bind(this));
     this.socket.on('edit-function', this.onEditFunction.bind(this));
+    this.socket.on('login', this.onLogin.bind(this));
+    this.socket.on('logout', this.onLogout.bind(this));
+    this.socket.on('playing', this.onPlaying.bind(this));
+    this.socket.on('quit', this.onQuit.bind(this));
 
     this.addLine(gray('Connecting...'));
   }
@@ -294,6 +298,22 @@ export class ClientViewModel {
 
   onEditFunction(data) {
     this.parentViewModel.parentViewModel.newEditFunctionTab(this.socket, data);
+  }
+
+  onLogin() {
+    window.loggedIn = true;
+  }
+
+  onLogout() {
+    window.loggedIn = false;
+  }
+
+  onPlaying() {
+    // noop
+  }
+
+  onQuit() {
+    // noop
   }
 
   onRequestInput(inputs, fn) {

@@ -159,7 +159,7 @@
             alert('Unable to connect to ' + SERVER_URI);
           } else {
             ko.applyBindings(new TabsViewModel());
-            addSaneOnUnloadHandler();
+            addSaneOnUnloadHandler(() => window.loggedIn);
           }
         });
       })();
