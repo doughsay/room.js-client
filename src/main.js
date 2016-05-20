@@ -5,3 +5,4 @@ codemirrorBinding.register();
 uncloackBinding.register();
 
 export { TabsViewModel } from './view-models/tabs-view-model';
+export { addSaneOnUnloadHandler } from './lib/add-sane-on-unload-handler';

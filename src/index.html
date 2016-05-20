@@ -23,7 +23,8 @@
     <link type='text/css' rel='stylesheet' href='css/main.css'>
 
     <script>
-      var SERVER_URI = 'http://api.roomjs.tk' // TODO: how to make this configurable?
+      // CONFIG:
+      var SERVER_URI = 'http://api.roomjs.tk'
     </script>
   </head>
   <body class='cloak' data-bind='event: {keydown: onKeyDown}, uncloak: true'>
@@ -148,6 +149,7 @@
     <script>
       (function() {
         var TabsViewModel = bundle.TabsViewModel;
+        var addSaneOnUnloadHandler = bundle.addSaneOnUnloadHandler;
 
         // exports global io
         document.write('<script src="' + SERVER_URI + '/socket.io/socket.io.js"><\/script>')
@@ -157,6 +159,7 @@
             alert('Unable to connect to ' + SERVER_URI);
           } else {
             ko.applyBindings(new TabsViewModel());
+            addSaneOnUnloadHandler();
           }
         });
       })();
