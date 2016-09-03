@@ -229,7 +229,7 @@ export class ClientViewModel {
       const pattern = /#cmd\[(.*?)\]/g;
       const match = pattern.exec(event.target.hash);
       if (!match) { return true; }
-      const command = match[1];
+      const command = decodeURIComponent(match[1]); // URI-encoded on some browsers (e.g. Firefox)
       this.command(command);
       this.sendCommand();
       return false;
