@@ -18,7 +18,14 @@ export class ClientViewModel {
   constructor(parentViewModel) {
     // Elements
 
-    this.$body = document.querySelector('body');
+    // Scrolling element is body on Webkit-based browsers,
+    // html on Firefox and Internet Explorer. All recent
+    // browsers tend to support document.scrollingElement from
+    // CSSOM working draft.
+    this.$scrollingElement = document.scrollingElement;
+    if (typeof this.$scrollingElement === 'undefined') {
+      this.$scrollingElement = document.querySelector('html');
+    }
 
     // Properties
 
@@ -169,7 +176,7 @@ export class ClientViewModel {
   }
 
   scrollToBottom() {
-    this.$body.scrollTop = this.$body.scrollHeight - window.innerHeight;
+    this.$scrollingElement.scrollTop = this.$scrollingElement.scrollHeight - window.innerHeight;
   }
 
   truncateHistory() {
