@@ -1,5 +1,6 @@
 /* global linkifyHtml */
 import ansiUp from 'ansi_up';
+
 const { ansi_to_html: ansiToHtml, escape_for_html: escapeForHtml } = ansiUp;
 
 function linkifyCommands(str) {

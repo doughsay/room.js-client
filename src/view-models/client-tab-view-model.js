@@ -1,7 +1,7 @@
 /* global ko */
 import ClientViewModel from './client-view-model';
 
-export class ClientTabViewModel {
+export default class ClientTabViewModel {
   constructor(parentViewModel) {
     // Properties
 
@@ -47,5 +47,3 @@ export class ClientTabViewModel {
     return true;
   }
 }
-
-export default ClientTabViewModel;

@@ -1,6 +1,6 @@
 /* global ko, CodeMirror */
 
-export class FunctionEditorViewModel {
+export default class FunctionEditorViewModel {
   constructor(parentViewModel, socket, { objectId, src, name }) {
     // Properties
 
@@ -90,5 +90,3 @@ export class FunctionEditorViewModel {
     return true;
   }
 }
-
-export default FunctionEditorViewModel;

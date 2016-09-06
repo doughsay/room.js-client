@@ -1,6 +1,6 @@
 /* global ko, CodeMirror */
 
-export class VerbEditorViewModel {
+export default class VerbEditorViewModel {
   constructor(parentViewModel, socket, { verb, objectId }) {
     // Properties
 
@@ -118,5 +118,3 @@ export class VerbEditorViewModel {
     return true;
   }
 }
-
-export default VerbEditorViewModel;
