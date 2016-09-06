@@ -160,7 +160,7 @@
           } else {
             const viewModel = new TabsViewModel();
             ko.applyBindings(viewModel);
-            addSaneOnUnloadHandler(() => viewModel.anyTabLoggedIn());
+            addSaneOnUnloadHandler(function() { return viewModel.anyTabLoggedIn() });
           }
         });
       })();
