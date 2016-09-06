@@ -4,7 +4,7 @@ import VerbEditorTabViewModel from './verb-editor-tab-view-model';
 import FunctionEditorTabViewModel from './function-editor-tab-view-model';
 import SearchViewModel from './search-view-model';
 
-export class TabsViewModel {
+export default class TabsViewModel {
   constructor() {
     // Observables
 
@@ -146,7 +146,7 @@ export class TabsViewModel {
     }
 
     if (activeViewModel !== this && activeViewModel.onKeyDown) {
-      return activeViewModel.onKeyDown.apply(activeViewModel, args);
+      return activeViewModel.onKeyDown(...args);
     }
     return true;
   }
@@ -155,10 +155,8 @@ export class TabsViewModel {
     const activeViewModel = this.activeViewModel();
 
     if (activeViewModel !== this && activeViewModel.onKeyUp) {
-      return activeViewModel.onKeyUp.apply(activeViewModel, args);
+      return activeViewModel.onKeyUp(...args);
     }
     return true;
   }
 }
-
-export default TabsViewModel;

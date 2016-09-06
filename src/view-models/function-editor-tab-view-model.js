@@ -1,7 +1,7 @@
 /* global ko */
 import FunctionEditorViewModel from './function-editor-view-model';
 
-export class FunctionEditorTabViewModel {
+export default class FunctionEditorTabViewModel {
   constructor(parentViewModel, socket, data) {
     // Properties
 
@@ -41,5 +41,3 @@ export class FunctionEditorTabViewModel {
     return false;
   }
 }
-
-export default FunctionEditorTabViewModel;

@@ -1,7 +1,7 @@
 /* global ko */
 import VerbEditorViewModel from './verb-editor-view-model';
 
-export class VerbEditorTabViewModel {
+export default class VerbEditorTabViewModel {
   constructor(parentViewModel, socket, data) {
     // Properties
 
@@ -41,5 +41,3 @@ export class VerbEditorTabViewModel {
     return false;
   }
 }
-
-export default VerbEditorTabViewModel;

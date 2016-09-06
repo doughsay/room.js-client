@@ -1,8 +1,8 @@
 /* global ko, io, SERVER_URI */
-const { observable, observableArray, computed } = ko;
-
 import { colorize, escapeHTML } from '../lib/html-helpers';
 import { boldRed, boldGreen, gray } from '../lib/colors';
+
+const { observable, observableArray, computed } = ko;
 
 function readConfig(key) {
   return window.localStorage ? JSON.parse(window.localStorage.getItem(key)) : null;
@@ -14,7 +14,7 @@ function writeConfig(key, value) {
   }
 }
 
-export class ClientViewModel {
+export default class ClientViewModel {
   constructor(parentViewModel) {
     // Elements
 
@@ -350,5 +350,3 @@ export class ClientViewModel {
     };
   }
 }
-
-export default ClientViewModel;

@@ -67,7 +67,7 @@ class VerbSearchResult extends SearchResult {
 }
 
 // TODO: socket permissions
-export class SearchViewModel {
+export default class SearchViewModel {
   constructor(parentViewModel, socket) {
     this.parentViewModel = parentViewModel;
     this.socket = socket;
@@ -159,5 +159,3 @@ export class SearchViewModel {
     }
   }
 }
-
-export default SearchViewModel;
