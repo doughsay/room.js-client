@@ -88,23 +88,39 @@ export default class TabsViewModel {
   }
 
   newClientTab() {
-    const newTab = new ClientTabViewModel(this);
-    this.tabs.push(newTab);
-    newTab.select();
+    this.addAndSelectTab(new ClientTabViewModel(this));
   }
 
-  newEditVerbTab(socket, data) {
-    const newTab = new VerbEditorTabViewModel(this, socket, data);
-    this.closeSameTabs(newTab);
-    this.tabs.push(newTab);
-    newTab.select();
+  newEditVerbTab(socket, { objectId, verb }) {
+    if (this.selectExistingTab(`${objectId}.${verb.name}`)) {
+      return;
+    }
+    this.addAndSelectTab(new VerbEditorTabViewModel(this, socket, { objectId, verb }));
   }
 
-  newEditFunctionTab(socket, data) {
-    const newTab = new FunctionEditorTabViewModel(this, socket, data);
-    this.closeSameTabs(newTab);
-    this.tabs.push(newTab);
-    newTab.select();
+  newEditFunctionTab(socket, { objectId, name }) {
+    if (this.selectExistingTab(`${objectId}.${name}`)) {
+      return;
+    }
+    this.addAndSelectTab(new FunctionEditorTabViewModel(this, socket, { objectId, name }));
+  }
+
+  addAndSelectTab(tab) {
+    this.tabs.push(tab);
+    tab.select();
+  }
+
+  selectExistingTab(name) {
+    let selected = false;
+
+    this.tabs().forEach(tab => {
+      if (tab.name() === name) {
+        tab.select();
+        selected = true;
+      }
+    });
+
+    return selected;
   }
 
   closeTab(tab) {
