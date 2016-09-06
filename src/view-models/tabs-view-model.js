@@ -95,12 +95,14 @@ export class TabsViewModel {
 
   newEditVerbTab(socket, data) {
     const newTab = new VerbEditorTabViewModel(this, socket, data);
+    this.closeSameTabs(newTab);
     this.tabs.push(newTab);
     newTab.select();
   }
 
   newEditFunctionTab(socket, data) {
     const newTab = new FunctionEditorTabViewModel(this, socket, data);
+    this.closeSameTabs(newTab);
     this.tabs.push(newTab);
     newTab.select();
   }
@@ -116,6 +118,15 @@ export class TabsViewModel {
     } else {
       this.activeTab(null);
     }
+  }
+
+  closeSameTabs(tab) {
+    // Close other tabs with same names, only if they are not edited
+    this.tabs().forEach(t => {
+      if (t.name() === tab.name() && !t.dirty()) {
+        this.closeTab(t);
+      }
+    });
   }
 
   onKeyDown(...args) {
