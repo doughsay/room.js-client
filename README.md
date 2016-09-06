@@ -1,8 +1,8 @@
 Room.js Client
 ==============
 [![Build Status](https://travis-ci.org/doughsay/room.js-client.svg?branch=master)](https://travis-ci.org/doughsay/room.js-client)
-![Dependencies](https://david-dm.org/doughsay/room.js-client.svg)
-![Dev Dependencies](https://david-dm.org/doughsay/room.js-client/dev-status.svg)
+[![dependencies Status](https://david-dm.org/doughsay/room.js-client/status.svg)](https://david-dm.org/doughsay/room.js-client)
+[![devDependencies Status](https://david-dm.org/doughsay/room.js-client/dev-status.svg)](https://david-dm.org/doughsay/room.js-client?type=dev)
 
 This is the Room.js client app.
 
