@@ -250,14 +250,14 @@ export default class ClientViewModel {
     switch (key) {
       case 38: { // up key
         if (this.currentHistory < this.history.length - 1) {
-          this.currentHistory++;
+          this.currentHistory += 1;
         }
         this.command(this.history[this.currentHistory]);
         return false;
       }
       case 40: { // down key
         if (this.currentHistory > -1) {
-          this.currentHistory--;
+          this.currentHistory -= 1;
         }
         if (this.currentHistory >= 0) {
           this.command(this.history[this.currentHistory]);
