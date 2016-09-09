@@ -127,7 +127,7 @@ export default class TabsViewModel {
     const l = this.tabs().length - 1;
     let i = this.tabs.indexOf(tab);
 
-    if (i === l) { i--; }
+    if (i === l) { i -= 1; }
     this.tabs.remove(tab);
     if (l > 0) {
       this.tabs()[i].select();
