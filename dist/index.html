@@ -158,7 +158,7 @@
           if (typeof io === 'undefined') {
             alert('Unable to connect to ' + SERVER_URI);
           } else {
-            const viewModel = new TabsViewModel();
+            var viewModel = new TabsViewModel();
             ko.applyBindings(viewModel);
             addSaneOnUnloadHandler(function() { return viewModel.anyTabLoggedIn() });
           }
