@@ -91,18 +91,22 @@ export default class TabsViewModel {
     this.addAndSelectTab(new ClientTabViewModel(this));
   }
 
-  newEditVerbTab(socket, { objectId, verb }) {
-    if (this.selectExistingTab(`${objectId}.${verb.name}`)) {
-      return;
-    }
-    this.addAndSelectTab(new VerbEditorTabViewModel(this, socket, { objectId, verb }));
+  newEditVerbTab(...args) {
+    this.newEditTab(VerbEditorTabViewModel, ...args);
   }
 
-  newEditFunctionTab(socket, { objectId, name }) {
-    if (this.selectExistingTab(`${objectId}.${name}`)) {
+  newEditFunctionTab(...args) {
+    this.newEditTab(FunctionEditorTabViewModel, ...args);
+  }
+
+  newEditTab(EditorTabViewModel, socket, data) {
+    const tabName = EditorTabViewModel.tabName(data);
+
+    if (this.selectExistingTab(tabName)) {
       return;
     }
-    this.addAndSelectTab(new FunctionEditorTabViewModel(this, socket, { objectId, name }));
+
+    this.addAndSelectTab(new EditorTabViewModel(this, socket, data));
   }
 
   addAndSelectTab(tab) {
