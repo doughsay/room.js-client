@@ -1,8 +1,10 @@
 #!/bin/sh
 
-# copy index.html
 mkdir -p dist
-cp src/index.html dist/index.html
+
+# copy and configure index.html
+SERVER_URI=${1:-http://localhost:8888}
+sed -e "s~{{SERVER_URI}}~$SERVER_URI~g" src/index.html > dist/index.html
 
 # copy css
 mkdir -p dist/css
