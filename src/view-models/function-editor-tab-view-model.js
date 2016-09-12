@@ -11,7 +11,7 @@ export default class FunctionEditorTabViewModel {
 
     // Observables
 
-    this.name = ko.observable(`${data.objectId}.${data.name}`);
+    this.name = ko.observable(FunctionEditorTabViewModel.tabName(data));
 
     // Computeds
 
@@ -39,5 +39,9 @@ export default class FunctionEditorTabViewModel {
 
   hideIfOnlyMe() {
     return false;
+  }
+
+  static tabName(data) {
+    return `${data.objectId}.${data.name}`;
   }
 }

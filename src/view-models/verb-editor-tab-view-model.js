@@ -11,7 +11,7 @@ export default class VerbEditorTabViewModel {
 
     // Observables
 
-    this.name = ko.observable(`${data.objectId}.${data.verb.name}`);
+    this.name = ko.observable(VerbEditorTabViewModel.tabName(data));
 
     // Computeds
 
@@ -39,5 +39,9 @@ export default class VerbEditorTabViewModel {
 
   hideIfOnlyMe() {
     return false;
+  }
+
+  static tabName(data) {
+    return `${data.objectId}.${data.verb.name}`;
   }
 }
