@@ -1,5 +1,3 @@
-/* global ko */
-
 function isElementVisibleIn(el, container) {
   const elRect = el.getBoundingClientRect();
   const containerRect = container.getBoundingClientRect();
@@ -13,20 +11,20 @@ function isElementVisibleIn(el, container) {
 }
 
 class SearchResult {
-  constructor(data) {
+  constructor(ko, data) {
     this.data = data;
     this.objectId = data.objectId;
     this.active = ko.observable(false);
     this.name = ko.computed(this.computeName.bind(this));
   }
 
-  static newFromResult(result) {
+  static newFromResult(ko, result) {
     if (result.function) {
       // eslint-disable-next-line no-use-before-define
-      return new FunctionSearchResult(result);
+      return new FunctionSearchResult(ko, result);
     } else if (result.verb) {
       // eslint-disable-next-line no-use-before-define
-      return new VerbSearchResult(result);
+      return new VerbSearchResult(ko, result);
     }
     throw new Error('Invalid result type.');
   }
@@ -68,7 +66,9 @@ class VerbSearchResult extends SearchResult {
 
 // TODO: socket permissions
 export default class SearchViewModel {
-  constructor(parentViewModel, socket) {
+  constructor({ doc, ko }, parentViewModel, socket) {
+    this.document = doc;
+    this.ko = ko;
     this.parentViewModel = parentViewModel;
     this.socket = socket;
     this.inputHasFocus = true;
@@ -98,8 +98,8 @@ export default class SearchViewModel {
   }
 
   scrollActiveResultIntoView() {
-    const el = document.querySelector('.search .results li.active');
-    const container = document.querySelector('.search .results');
+    const el = this.document.querySelector('.search .results li.active');
+    const container = this.document.querySelector('.search .results');
     if (el && !isElementVisibleIn(el, container)) {
       el.scrollIntoView(this.selectionDirection() === -1);
     }
@@ -117,7 +117,7 @@ export default class SearchViewModel {
   onSearch(str) {
     this.socket.emit('search', str, results => {
       this.selectedIndex(0);
-      this.results(results.map(result => SearchResult.newFromResult(result)));
+      this.results(results.map(result => SearchResult.newFromResult(this.ko, result)));
     });
   }
 

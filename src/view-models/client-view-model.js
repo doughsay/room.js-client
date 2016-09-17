@@ -1,30 +1,22 @@
-/* global ko, io, SERVER_URI */
 import { colorize, escapeHTML } from '../lib/html-helpers';
 import { boldRed, boldGreen, gray } from '../lib/colors';
 
-const { observable, observableArray, computed } = ko;
-
-function readConfig(key) {
-  return window.localStorage ? JSON.parse(window.localStorage.getItem(key)) : null;
-}
-
-function writeConfig(key, value) {
-  if (window.localStorage) {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  }
-}
-
 export default class ClientViewModel {
-  constructor(parentViewModel) {
+  constructor(deps, parentViewModel) {
+    const { SERVER_URI, doc, win, ko, io } = deps;
+    const { observable, observableArray, computed } = ko;
+
+    this.window = win;
+
     // Elements
 
     // Scrolling element is body on Webkit-based browsers,
     // html on Firefox and Internet Explorer. All recent
     // browsers tend to support document.scrollingElement from
     // CSSOM working draft.
-    this.$scrollingElement = document.scrollingElement;
+    this.$scrollingElement = doc.scrollingElement;
     if (typeof this.$scrollingElement === 'undefined') {
-      this.$scrollingElement = document.querySelector('html');
+      this.$scrollingElement = doc.querySelector('html');
     }
 
     // Properties
@@ -45,10 +37,10 @@ export default class ClientViewModel {
     this.playing = observable(false);
 
     // client config
-    this.maxLines = observable(readConfig('maxLines') || 1000);
-    this.maxHistory = observable(readConfig('maxHistory') || 1000);
-    this.echo = observable(readConfig('echo') || false);
-    this.space = observable(readConfig('space') || false);
+    this.maxLines = observable(this.readConfig('maxLines') || 1000);
+    this.maxHistory = observable(this.readConfig('maxHistory') || 1000);
+    this.echo = observable(this.readConfig('echo') || false);
+    this.space = observable(this.readConfig('space') || false);
 
     // Computeds
 
@@ -61,11 +53,11 @@ export default class ClientViewModel {
     });
 
     this.maxHistory.subscribe(max => {
-      if (history().length > max) { this.truncateHistory(); }
+      if (this.history().length > max) { this.truncateHistory(); }
     });
 
-    this.echo.subscribe(echo => { writeConfig('echo', echo); });
-    this.space.subscribe(space => { writeConfig('space', space); });
+    this.echo.subscribe(echo => { this.writeConfig('echo', echo); });
+    this.space.subscribe(space => { this.writeConfig('space', space); });
 
     // Socket Setup
 
@@ -176,7 +168,8 @@ export default class ClientViewModel {
   }
 
   scrollToBottom() {
-    this.$scrollingElement.scrollTop = this.$scrollingElement.scrollHeight - window.innerHeight;
+    this.$scrollingElement.scrollTop =
+      this.$scrollingElement.scrollHeight - this.window.innerHeight;
   }
 
   truncateHistory() {
@@ -348,5 +341,17 @@ export default class ClientViewModel {
       data[input.name || 'input'] = userInput;
       this.getInputFromUser(data, restInputs, done);
     };
+  }
+
+  // Local storage helpers
+
+  readConfig(key) {
+    return this.window.localStorage ? JSON.parse(this.window.localStorage.getItem(key)) : null;
+  }
+
+  writeConfig(key, value) {
+    if (this.window.localStorage) {
+      this.window.localStorage.setItem(key, JSON.stringify(value));
+    }
   }
 }

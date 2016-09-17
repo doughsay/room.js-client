@@ -1,13 +1,14 @@
-/* global ko */
 import VerbEditorViewModel from './verb-editor-view-model';
 
 export default class VerbEditorTabViewModel {
-  constructor(parentViewModel, socket, data) {
+  constructor(deps, parentViewModel, socket, data) {
+    const { ko } = deps;
+
     // Properties
 
     this.parentViewModel = parentViewModel;
     this.templateId = 'verb-editor';
-    this.viewModel = new VerbEditorViewModel(this, socket, data);
+    this.viewModel = new VerbEditorViewModel(deps, this, socket, data);
 
     // Observables
 

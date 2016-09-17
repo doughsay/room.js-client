@@ -1,13 +1,14 @@
-/* global ko */
 import FunctionEditorViewModel from './function-editor-view-model';
 
 export default class FunctionEditorTabViewModel {
-  constructor(parentViewModel, socket, data) {
+  constructor(deps, parentViewModel, socket, data) {
+    const { ko } = deps;
+
     // Properties
 
     this.parentViewModel = parentViewModel;
     this.templateId = 'function-editor';
-    this.viewModel = new FunctionEditorViewModel(this, socket, data);
+    this.viewModel = new FunctionEditorViewModel(deps, this, socket, data);
 
     // Observables
 

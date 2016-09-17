@@ -3,7 +3,7 @@
 
 const NAVIGATE_AWAY_MESSAGE = 'This action will log you out of the game!';
 
-export default function addSaneOnUnloadHandler(promptBeforeLeaving = () => true) {
+export default function addSaneOnUnloadHandler(win, promptBeforeLeaving = () => true) {
   let alreadPrompted = false;
   let timeoutID = 0;
 
@@ -12,7 +12,7 @@ export default function addSaneOnUnloadHandler(promptBeforeLeaving = () => true)
     timeoutID = 0;
   };
 
-  window.onbeforeunload = () => {
+  win.onbeforeunload = () => {
     if (promptBeforeLeaving() && !alreadPrompted) {
       alreadPrompted = true;
       timeoutID = setTimeout(reset, 100);
@@ -21,7 +21,7 @@ export default function addSaneOnUnloadHandler(promptBeforeLeaving = () => true)
     return null;
   };
 
-  window.onunload = () => {
+  win.onunload = () => {
     clearTimeout(timeoutID);
   };
 }

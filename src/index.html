@@ -158,9 +158,19 @@
           if (typeof io === 'undefined') {
             alert('Unable to connect to ' + SERVER_URI);
           } else {
-            var viewModel = new TabsViewModel();
+            var deps = {
+              win: window,
+              doc: document,
+              ko: ko,
+              io: io,
+              CodeMirror: CodeMirror,
+              linkify: linkify,
+              linkifyHtml: linkifyHtml,
+              SERVER_URI: SERVER_URI
+            };
+            var viewModel = new TabsViewModel(deps);
             ko.applyBindings(viewModel);
-            addSaneOnUnloadHandler(function() { return viewModel.anyTabLoggedIn() });
+            addSaneOnUnloadHandler(window, function() { return viewModel.anyTabLoggedIn() });
           }
         });
       })();

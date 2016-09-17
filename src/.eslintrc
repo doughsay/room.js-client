@@ -1,8 +1,5 @@
 {
   "extends": "airbnb/base",
-  "env": {
-    "browser": true,
-  },
   "rules": {
     "no-param-reassign": [2, {"props": false}],
     "strict": [2, "never"],
