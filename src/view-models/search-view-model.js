@@ -74,7 +74,7 @@ export default class SearchViewModel {
     this.inputHasFocus = true;
 
     this.search = ko.observable('');
-    this.results = ko.observableArray();
+    this.results = ko.observableArray([]);
     this.selectedIndex = ko.observable(0);
     this.selectionDirection = ko.observable(0);
 

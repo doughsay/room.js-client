@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# generate coverage for compiled output
+node --use_strict --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/tape -- 'test/**/*.js' > /dev/null
+
+# remap coverage using sourcemaps
+cat ./coverage/coverage.json | ./node_modules/.bin/remap-istanbul -o ./coverage/lcov-remapped.info -t lcovonly --exclude node_modules,knockout.js
+
+# rewrite relative paths in remapped coverage
+sed -i.bak "s#\\.\\./\\.\\.#$(pwd)#g" coverage/lcov-remapped.info

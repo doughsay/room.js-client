@@ -1,10 +1,8 @@
-/* global ko */
+function register(ko) {
+  function init(element) {
+    element.classList.remove('cloak');
+  }
 
-function init(element) {
-  element.classList.remove('cloak');
-}
-
-function register() {
   ko.bindingHandlers.uncloak = { init };
 }
 
