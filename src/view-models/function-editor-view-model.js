@@ -1,9 +1,8 @@
-/* global ko, CodeMirror */
-
 export default class FunctionEditorViewModel {
-  constructor(parentViewModel, socket, { objectId, src, name }) {
+  constructor({ ko, CodeMirror, win }, parentViewModel, socket, { objectId, src, name }) {
     // Properties
 
+    this.window = win;
     this.parentViewModel = parentViewModel;
     this.socket = socket;
     this.objectId = objectId;
@@ -43,7 +42,7 @@ export default class FunctionEditorViewModel {
 
     if (!this.socket.connected) {
       // eslint-disable-next-line no-alert
-      window.alert([
+      this.window.alert([
         'The client tab that this editor was opened from has been',
         'closed.  You must keep that open for saving to work.',
       ].join(' '));
@@ -55,7 +54,7 @@ export default class FunctionEditorViewModel {
         this._code(this.code());
       } else {
         // eslint-disable-next-line no-alert
-        window.alert(response);
+        this.window.alert(response);
       }
     });
   }
@@ -68,7 +67,7 @@ export default class FunctionEditorViewModel {
 
     return this.dirty()
       // eslint-disable-next-line no-alert
-      ? window.confirm(msg)
+      ? this.window.confirm(msg)
       : true;
   }
 

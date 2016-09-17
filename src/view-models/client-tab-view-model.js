@@ -1,13 +1,14 @@
-/* global ko */
 import ClientViewModel from './client-view-model';
 
 export default class ClientTabViewModel {
-  constructor(parentViewModel) {
+  constructor(deps, parentViewModel) {
+    const { ko } = deps;
+
     // Properties
 
     this.parentViewModel = parentViewModel;
     this.templateId = 'client';
-    this.viewModel = new ClientViewModel(this);
+    this.viewModel = new ClientViewModel(deps, this);
     this.dirty = false;
 
     // Observables

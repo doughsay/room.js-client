@@ -1,15 +1,17 @@
-/* global ko */
 import ClientTabViewModel from './client-tab-view-model';
 import VerbEditorTabViewModel from './verb-editor-tab-view-model';
 import FunctionEditorTabViewModel from './function-editor-tab-view-model';
 import SearchViewModel from './search-view-model';
 
 export default class TabsViewModel {
-  constructor() {
+  constructor(deps) {
+    const { ko } = deps;
+    this.deps = deps;
+
     // Observables
 
     this.activeTab = ko.observable();
-    this.tabs = ko.observableArray([new ClientTabViewModel(this)]);
+    this.tabs = ko.observableArray([new ClientTabViewModel(deps, this)]);
     this.searchViewModel = ko.observable();
 
     // Computeds
@@ -88,7 +90,7 @@ export default class TabsViewModel {
   }
 
   newClientTab() {
-    this.addAndSelectTab(new ClientTabViewModel(this));
+    this.addAndSelectTab(new ClientTabViewModel(this.deps, this));
   }
 
   newEditVerbTab(...args) {
@@ -106,7 +108,7 @@ export default class TabsViewModel {
       return;
     }
 
-    this.addAndSelectTab(new EditorTabViewModel(this, socket, data));
+    this.addAndSelectTab(new EditorTabViewModel(this.deps, this, socket, data));
   }
 
   addAndSelectTab(tab) {
@@ -160,7 +162,7 @@ export default class TabsViewModel {
     // open the search box on cmd+p (or ctrl+p) if it's not already open
     if ((meta && pKey) || (ctrl && pKey)) {
       if (!this.searchViewModel()) {
-        this.searchViewModel(new SearchViewModel(this, this.activeSocket()));
+        this.searchViewModel(new SearchViewModel(this.deps, this, this.activeSocket()));
       }
       return false;
     }

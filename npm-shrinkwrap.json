@@ -489,6 +489,11 @@
       "from": "escope@>=3.6.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/escope/-/escope-3.6.0.tgz"
     },
+    "eslint-config-airbnb-base": {
+      "version": "7.1.0",
+      "from": "eslint-config-airbnb-base@>=7.1.0 <8.0.0",
+      "resolved": "https://registry.npmjs.org/eslint-config-airbnb-base/-/eslint-config-airbnb-base-7.1.0.tgz"
+    },
     "eslint-import-resolver-node": {
       "version": "0.2.3",
       "from": "eslint-import-resolver-node@>=0.2.0 <0.3.0",
@@ -796,9 +801,9 @@
       }
     },
     "magic-string": {
-      "version": "0.15.2",
-      "from": "magic-string@>=0.15.2 <0.16.0",
-      "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.15.2.tgz"
+      "version": "0.16.0",
+      "from": "magic-string@>=0.16.0 <0.17.0",
+      "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.16.0.tgz"
     },
     "minimatch": {
       "version": "3.0.3",

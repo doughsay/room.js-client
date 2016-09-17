@@ -1,9 +1,8 @@
-/* global ko, CodeMirror */
-
 export default class VerbEditorViewModel {
-  constructor(parentViewModel, socket, { verb, objectId }) {
+  constructor({ ko, CodeMirror, win }, parentViewModel, socket, { verb, objectId }) {
     // Properties
 
+    this.window = win;
     this.parentViewModel = parentViewModel;
     this.socket = socket;
     this.objectId = objectId;
@@ -67,7 +66,7 @@ export default class VerbEditorViewModel {
 
     if (!this.socket.connected) {
       // eslint-disable-next-line no-alert
-      window.alert([
+      this.window.alert([
         'The client tab that this editor was opened from has been',
         'closed.  You must keep that open for saving to work.',
       ].join(' '));
@@ -83,7 +82,7 @@ export default class VerbEditorViewModel {
         this._code(this.code());
       } else {
         // eslint-disable-next-line no-alert
-        window.alert(response);
+        this.window.alert(response);
       }
     });
   }
@@ -96,7 +95,7 @@ export default class VerbEditorViewModel {
 
     return this.dirty()
       // eslint-disable-next-line no-alert
-      ? window.confirm(msg)
+      ? this.window.confirm(msg)
       : true;
   }
 
