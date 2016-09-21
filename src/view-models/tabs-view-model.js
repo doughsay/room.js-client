@@ -11,7 +11,7 @@ export default class TabsViewModel {
     // Observables
 
     this.activeTab = ko.observable();
-    this.tabs = ko.observableArray([new ClientTabViewModel(deps, this)]);
+    this.tabs = ko.observableArray([]);
     this.searchViewModel = ko.observable();
 
     // Computeds

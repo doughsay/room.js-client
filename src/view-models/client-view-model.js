@@ -1,12 +1,15 @@
-import { colorize, escapeHTML } from '../lib/html-helpers';
+import ansiUp from 'ansi_up';
 import { boldRed, boldGreen, gray } from '../lib/colors';
+
+const { ansi_to_html: ansiToHtml, escape_for_html: escapeForHtml } = ansiUp;
 
 export default class ClientViewModel {
   constructor(deps, parentViewModel) {
-    const { SERVER_URI, doc, win, ko, io } = deps;
+    const { SERVER_URI, doc, win, ko, io, linkifyHtml } = deps;
     const { observable, observableArray, computed } = ko;
 
     this.window = win;
+    this.linkifyHtml = linkifyHtml;
 
     // Elements
 
@@ -44,7 +47,7 @@ export default class ClientViewModel {
 
     // Computeds
 
-    this.promptFormatted = computed(() => colorize(escapeHTML(this.composedPrompt())));
+    this.promptFormatted = computed(() => this.colorize(this.escapeHTML(this.composedPrompt())));
 
     // Subscribers
 
@@ -147,7 +150,7 @@ export default class ClientViewModel {
   }
 
   addLine(line) {
-    this.lines.push(colorize(escapeHTML(line)));
+    this.lines.push(this.colorize(this.escapeHTML(line)));
     this.scrollToBottom();
   }
 
@@ -353,5 +356,20 @@ export default class ClientViewModel {
     if (this.window.localStorage) {
       this.window.localStorage.setItem(key, JSON.stringify(value));
     }
+  }
+
+  // Color and HTML helpers
+
+  linkifyCommands(str) {
+    const pattern = /#cmd\[(.*?)\]/g;
+    return str.replace(pattern, (match, capture) => `<a href='${match}'>${capture}</a>`);
+  }
+
+  colorize(str) {
+    return this.linkifyCommands(this.linkifyHtml(ansiToHtml(str, { use_classes: true })));
+  }
+
+  escapeHTML(str) {
+    return escapeForHtml(str);
   }
 }
