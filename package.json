@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "babel-preset-es2015-rollup": "^1.1.1",
-    "bower": "^1.7.7",
+    "bower": "^1.8.0",
     "coveralls": "^2.11.13",
     "eslint": "^3.4.0",
     "eslint-config-airbnb": "^12.0.0",
