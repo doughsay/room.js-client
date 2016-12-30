@@ -24,7 +24,7 @@
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",
     "remap-istanbul": "^0.6.4",
-    "rollup": "^0.36.0",
+    "rollup": "^0.39.1",
     "rollup-plugin-babel": "^2.4.0",
     "rollup-plugin-commonjs": "^5.0.0",
     "rollup-plugin-json": "^2.0.0",
