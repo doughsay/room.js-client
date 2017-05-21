@@ -7,7 +7,7 @@
     "lint": "./bin/lint",
     "test": "./bin/test",
     "cover": "./bin/cover",
-    "coveralls": "./bin/coveralls"
+    "codecov": "./node_modules/.bin/codecov"
   },
   "author": "Chris Dosé",
   "license": "MIT",
@@ -17,7 +17,7 @@
   "devDependencies": {
     "babel-preset-es2015-rollup": "^3.0.0",
     "bower": "^1.7.7",
-    "coveralls": "^2.11.13",
+    "codecov": "^2.2.0",
     "eslint": "^3.4.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-plugin-import": "^2.0.0",

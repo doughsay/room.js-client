@@ -15,4 +15,4 @@ script:
   - yarn run build
   - yarn test
   - yarn run cover
-  - yarn run coveralls
+  - yarn run codecov
