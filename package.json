@@ -4,7 +4,7 @@
   "description": "Room.js client.",
   "scripts": {
     "build": "./bin/build",
-    "lint": "./bin/lint",
+    "lint": "./node_modules/.bin/standard",
     "test": "./bin/test",
     "cover": "./bin/cover",
     "codecov": "./node_modules/.bin/codecov"
@@ -14,13 +14,15 @@
   "engines": {
     "node": ">=6.0.0"
   },
+  "standard": {
+    "ignore": [
+      "dist/*"
+    ]
+  },
   "devDependencies": {
     "babel-preset-es2015-rollup": "^3.0.0",
     "bower": "^1.7.7",
     "codecov": "^2.2.0",
-    "eslint": "^3.4.0",
-    "eslint-config-airbnb": "^15.0.1",
-    "eslint-plugin-import": "^2.0.0",
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",
     "remap-istanbul": "^0.9.5",
@@ -30,6 +32,7 @@
     "rollup-plugin-json": "^2.0.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
+    "standard": "^10.0.2",
     "tape": "^4.6.0"
   },
   "dependencies": {

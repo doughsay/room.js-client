@@ -1,15 +1,15 @@
-import ansiUp from 'ansi_up';
-import { boldRed, boldGreen, gray } from '../lib/colors';
+import ansiUp from 'ansi_up'
+import { boldRed, boldGreen, gray } from '../lib/colors'
 
-const { ansi_to_html: ansiToHtml, escape_for_html: escapeForHtml } = ansiUp;
+const { ansi_to_html: ansiToHtml, escape_for_html: escapeForHtml } = ansiUp
 
 export default class ClientViewModel {
-  constructor(deps, parentViewModel) {
-    const { SERVER_URI, doc, win, ko, io, linkifyHtml } = deps;
-    const { observable, observableArray, computed } = ko;
+  constructor (deps, parentViewModel) {
+    const { SERVER_URI, doc, win, ko, io, linkifyHtml } = deps
+    const { observable, observableArray, computed } = ko
 
-    this.window = win;
-    this.linkifyHtml = linkifyHtml;
+    this.window = win
+    this.linkifyHtml = linkifyHtml
 
     // Elements
 
@@ -17,359 +17,359 @@ export default class ClientViewModel {
     // html on Firefox and Internet Explorer. All recent
     // browsers tend to support document.scrollingElement from
     // CSSOM working draft.
-    this.$scrollingElement = doc.scrollingElement;
+    this.$scrollingElement = doc.scrollingElement
     if (typeof this.$scrollingElement === 'undefined') {
-      this.$scrollingElement = doc.querySelector('html');
+      this.$scrollingElement = doc.querySelector('html')
     }
 
     // Properties
 
-    this.parentViewModel = parentViewModel;
-    this.socket = io.connect(SERVER_URI);
-    this.history = [];
-    this.inputCallback = null;
+    this.parentViewModel = parentViewModel
+    this.socket = io.connect(SERVER_URI)
+    this.history = []
+    this.inputCallback = null
 
     // Observables
 
-    this.lines = observableArray([]);
-    this.command = observable('');
-    this.inputType = observable('text');
-    this.promptStr = observable('');
-    this.inputHasFocus = observable(true);
-    this.loggedIn = observable(false);
-    this.playing = observable(false);
+    this.lines = observableArray([])
+    this.command = observable('')
+    this.inputType = observable('text')
+    this.promptStr = observable('')
+    this.inputHasFocus = observable(true)
+    this.loggedIn = observable(false)
+    this.playing = observable(false)
 
     // client config
-    this.maxLines = observable(this.readConfig('maxLines') || 1000);
-    this.maxHistory = observable(this.readConfig('maxHistory') || 1000);
-    this.echo = observable(this.readConfig('echo') || false);
-    this.space = observable(this.readConfig('space') || false);
+    this.maxLines = observable(this.readConfig('maxLines') || 1000)
+    this.maxHistory = observable(this.readConfig('maxHistory') || 1000)
+    this.echo = observable(this.readConfig('echo') || false)
+    this.space = observable(this.readConfig('space') || false)
 
     // Computeds
 
-    this.promptFormatted = computed(() => this.colorize(this.escapeHTML(this.composedPrompt())));
+    this.promptFormatted = computed(() => this.colorize(this.escapeHTML(this.composedPrompt())))
 
     // Subscribers
 
     this.maxLines.subscribe(max => {
-      if (this.lines().length > max) { this.truncateLines(); }
-    });
+      if (this.lines().length > max) { this.truncateLines() }
+    })
 
     this.maxHistory.subscribe(max => {
-      if (this.history().length > max) { this.truncateHistory(); }
-    });
+      if (this.history().length > max) { this.truncateHistory() }
+    })
 
-    this.echo.subscribe(echo => { this.writeConfig('echo', echo); });
-    this.space.subscribe(space => { this.writeConfig('space', space); });
+    this.echo.subscribe(echo => { this.writeConfig('echo', echo) })
+    this.space.subscribe(space => { this.writeConfig('space', space) })
 
     // Socket Setup
 
-    this.socket.on('connect', this.onConnect.bind(this));
-    this.socket.on('connecting', this.onConnecting.bind(this));
-    this.socket.on('disconnect', this.onDisconnect.bind(this));
-    this.socket.on('connect_failed', this.onConnectFailed.bind(this));
-    this.socket.on('error', this.onError.bind(this));
-    this.socket.on('reconnect_failed', this.onReconnectFailed.bind(this));
-    this.socket.on('reconnect', this.onReconnect.bind(this));
-    this.socket.on('reconnecting', this.onReconnecting.bind(this));
-    this.socket.on('output', this.onOutput.bind(this));
-    this.socket.on('set-prompt', this.onSetPrompt.bind(this));
-    this.socket.on('request-input', this.onRequestInput.bind(this));
-    this.socket.on('edit-verb', this.onEditVerb.bind(this));
-    this.socket.on('edit-function', this.onEditFunction.bind(this));
-    this.socket.on('login', this.onLogin.bind(this));
-    this.socket.on('logout', this.onLogout.bind(this));
-    this.socket.on('playing', this.onPlaying.bind(this));
-    this.socket.on('quit', this.onQuit.bind(this));
+    this.socket.on('connect', this.onConnect.bind(this))
+    this.socket.on('connecting', this.onConnecting.bind(this))
+    this.socket.on('disconnect', this.onDisconnect.bind(this))
+    this.socket.on('connect_failed', this.onConnectFailed.bind(this))
+    this.socket.on('error', this.onError.bind(this))
+    this.socket.on('reconnect_failed', this.onReconnectFailed.bind(this))
+    this.socket.on('reconnect', this.onReconnect.bind(this))
+    this.socket.on('reconnecting', this.onReconnecting.bind(this))
+    this.socket.on('output', this.onOutput.bind(this))
+    this.socket.on('set-prompt', this.onSetPrompt.bind(this))
+    this.socket.on('request-input', this.onRequestInput.bind(this))
+    this.socket.on('edit-verb', this.onEditVerb.bind(this))
+    this.socket.on('edit-function', this.onEditFunction.bind(this))
+    this.socket.on('login', this.onLogin.bind(this))
+    this.socket.on('logout', this.onLogout.bind(this))
+    this.socket.on('playing', this.onPlaying.bind(this))
+    this.socket.on('quit', this.onQuit.bind(this))
 
-    this.addLine(gray('Connecting...'));
+    this.addLine(gray('Connecting...'))
   }
 
-  composedPrompt(optionalStr = '') {
-    return `${this.promptStr()} > ${optionalStr}`.trim();
+  composedPrompt (optionalStr = '') {
+    return `${this.promptStr()} > ${optionalStr}`.trim()
   }
 
-  setPrompt(str, type) {
-    this.promptStr(str);
-    if (type) { this.inputType(type); }
+  setPrompt (str, type) {
+    this.promptStr(str)
+    if (type) { this.inputType(type) }
   }
 
-  sendCommand() {
-    const command = this.command().trim();
+  sendCommand () {
+    const command = this.command().trim()
 
-    if (!command) { return; }
+    if (!command) { return }
 
-    this.echoCommand(command);
-    this.addToHistory(command);
+    this.echoCommand(command)
+    this.addToHistory(command)
 
     if (this.handleClientCommand(command)) {
       // done, client handled command
     } else if (!this.socket.connected) {
-      this.addLine(boldRed('Not connected.'));
+      this.addLine(boldRed('Not connected.'))
     } else if (this.inputCallback) {
-      this.handleInputCallback(command);
+      this.handleInputCallback(command)
     } else {
-      this.socket.emit('input', command);
+      this.socket.emit('input', command)
     }
 
-    this.command('');
+    this.command('')
   }
 
-  echoCommand(command) {
-    if (!this.echo() || this.inputType() === 'password') { return; }
-    this.addLine(this.composedPrompt(command));
-    if (this.space()) { this.addLine(' '); }
+  echoCommand (command) {
+    if (!this.echo() || this.inputType() === 'password') { return }
+    this.addLine(this.composedPrompt(command))
+    if (this.space()) { this.addLine(' ') }
   }
 
-  addToHistory(command) {
-    if (this.inputType() === 'password') { return; }
-    this.history.unshift(command);
-    if (this.history.length > this.maxHistory()) { this.truncateHistory(); }
-    this.currentHistory = -1;
+  addToHistory (command) {
+    if (this.inputType() === 'password') { return }
+    this.history.unshift(command)
+    if (this.history.length > this.maxHistory()) { this.truncateHistory() }
+    this.currentHistory = -1
   }
 
-  handleClientCommand(command) {
+  handleClientCommand (command) {
     switch (command) {
-      case '.clear': this.lines([]); return true;
-      case '.connect': this.reconnectSocket(); return true;
-      case '.disconnect': this.disconnectSocket(); return true;
-      case '.echo on': this.echo(true); return true;
-      case '.echo off': this.echo(false); return true;
-      case '.space on': this.space(true); return true;
-      case '.space off': this.space(false); return true;
-      case '.new tab': this.parentViewModel.parentViewModel.newClientTab(); return true;
-      case '.close tab': this.parentViewModel.close(); return true;
-      default: return false;
+      case '.clear': this.lines([]); return true
+      case '.connect': this.reconnectSocket(); return true
+      case '.disconnect': this.disconnectSocket(); return true
+      case '.echo on': this.echo(true); return true
+      case '.echo off': this.echo(false); return true
+      case '.space on': this.space(true); return true
+      case '.space off': this.space(false); return true
+      case '.new tab': this.parentViewModel.parentViewModel.newClientTab(); return true
+      case '.close tab': this.parentViewModel.close(); return true
+      default: return false
     }
   }
 
-  handleInputCallback(command) {
-    const callback = this.inputCallback;
-    this.inputCallback = null;
-    callback(command);
+  handleInputCallback (command) {
+    const callback = this.inputCallback
+    this.inputCallback = null
+    callback(command)
   }
 
-  addLine(line) {
-    this.lines.push(this.colorize(this.escapeHTML(line)));
-    this.scrollToBottom();
+  addLine (line) {
+    this.lines.push(this.colorize(this.escapeHTML(line)))
+    this.scrollToBottom()
   }
 
-  disconnectSocket() {
+  disconnectSocket () {
     if (this.socket.connected) {
-      this.socket.disconnect();
+      this.socket.disconnect()
     } else {
-      this.addLine(boldRed('Not connected.'));
+      this.addLine(boldRed('Not connected.'))
     }
   }
 
-  reconnectSocket() {
+  reconnectSocket () {
     if (this.socket.connected) {
-      this.addLine(boldRed('Already connected.'));
+      this.addLine(boldRed('Already connected.'))
     } else {
-      this.socket.connect();
+      this.socket.connect()
     }
   }
 
-  scrollToBottom() {
+  scrollToBottom () {
     this.$scrollingElement.scrollTop =
-      this.$scrollingElement.scrollHeight - this.window.innerHeight;
+      this.$scrollingElement.scrollHeight - this.window.innerHeight
   }
 
-  truncateHistory() {
-    this.history = this.history.slice(0, this.maxHistory());
+  truncateHistory () {
+    this.history = this.history.slice(0, this.maxHistory())
   }
 
-  truncateLines() {
-    const lengthDiff = this.lines().length - this.maxLines();
-    this.lines(this.lines.slice(lengthDiff));
+  truncateLines () {
+    const lengthDiff = this.lines().length - this.maxLines()
+    this.lines(this.lines.slice(lengthDiff))
   }
 
-  willClose() {
-    this.socket.disconnect();
-    return true;
+  willClose () {
+    this.socket.disconnect()
+    return true
   }
 
   // Event handlers
 
-  onKeyDown(_, event) {
-    const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
-    const meta = event.metaKey;
-    const ctrl = event.ctrlKey;
-    const shift = event.shiftKey;
-    const vKey = key === 86;
-    const upKey = key === 38;
-    const downKey = key === 40;
-    const tabKey = key === 9;
+  onKeyDown (_, event) {
+    const key = typeof event.which === 'undefined' ? event.keyCode : event.which
+    const meta = event.metaKey
+    const ctrl = event.ctrlKey
+    const shift = event.shiftKey
+    const vKey = key === 86
+    const upKey = key === 38
+    const downKey = key === 40
+    const tabKey = key === 9
 
     // if holding control or command and not trying to paste,
     // ignore this keypress
     if ((meta && !vKey) || (ctrl && !vKey)) {
-      return true;
+      return true
     }
 
     // otherwise, re-focus the input before the key is let up
     if (!this.inputHasFocus()) {
-      this.inputHasFocus(true);
+      this.inputHasFocus(true)
       // when hitting up or down and not focused,
       // the keydown event doesn't get passed on
       if (upKey || downKey) {
         // HACK fake event object
-        return this.onRecall(null, { which: key });
+        return this.onRecall(null, { which: key })
       }
     }
 
     if (tabKey) {
-      const direction = shift ? -1 : 1;
-      this.socket.emit('tab-key-press', { direction });
-      return false;
+      const direction = shift ? -1 : 1
+      this.socket.emit('tab-key-press', { direction })
+      return false
     }
 
-    return true;
+    return true
   }
 
-  onClick(_, event) {
+  onClick (_, event) {
     if (event.target && event.target.hash) {
-      const pattern = /#cmd\[(.*?)]/g;
-      const match = pattern.exec(event.target.hash);
-      if (!match) { return true; }
-      const command = decodeURIComponent(match[1]); // URI-encoded on some browsers (e.g. Firefox)
-      this.command(command);
-      this.sendCommand();
-      return false;
+      const pattern = /#cmd\[(.*?)]/g
+      const match = pattern.exec(event.target.hash)
+      if (!match) { return true }
+      const command = decodeURIComponent(match[1]) // URI-encoded on some browsers (e.g. Firefox)
+      this.command(command)
+      this.sendCommand()
+      return false
     }
-    return true;
+    return true
   }
 
-  onRecall(_, event) {
-    const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
-    if (this.history.length === 0) { return true; }
+  onRecall (_, event) {
+    const key = typeof event.which === 'undefined' ? event.keyCode : event.which
+    if (this.history.length === 0) { return true }
     switch (key) {
       case 38: { // up key
         if (this.currentHistory < this.history.length - 1) {
-          this.currentHistory += 1;
+          this.currentHistory += 1
         }
-        this.command(this.history[this.currentHistory]);
-        return false;
+        this.command(this.history[this.currentHistory])
+        return false
       }
       case 40: { // down key
         if (this.currentHistory > -1) {
-          this.currentHistory -= 1;
+          this.currentHistory -= 1
         }
         if (this.currentHistory >= 0) {
-          this.command(this.history[this.currentHistory]);
+          this.command(this.history[this.currentHistory])
         } else {
-          this.command('');
+          this.command('')
         }
-        break;
+        break
       }
       default: {
-        break;
+        break
       }
     }
-    return true;
+    return true
   }
 
   // Socket event handlers
 
-  onConnect() { this.addLine(boldGreen('Connected!')); }
-  onConnecting() { this.addLine(gray('Connecting...')); }
+  onConnect () { this.addLine(boldGreen('Connected!')) }
+  onConnecting () { this.addLine(gray('Connecting...')) }
 
-  onDisconnect() {
-    this.addLine(boldRed('Disconnected from server.'));
-    this.setPrompt('');
-    this.inputCallback = null;
-    this.loggedIn(false);
-    this.playing(false);
+  onDisconnect () {
+    this.addLine(boldRed('Disconnected from server.'))
+    this.setPrompt('')
+    this.inputCallback = null
+    this.loggedIn(false)
+    this.playing(false)
   }
 
-  onConnectFailed() { this.addLine(boldRed('Connection to server failed.')); }
-  onError() { this.addLine(boldRed('An unknown error occurred.')); }
-  onReconnectFailed() { this.addLine(boldRed('Unable to reconnect to server.')); }
-  onReconnect() {}
-  onReconnecting() {}
+  onConnectFailed () { this.addLine(boldRed('Connection to server failed.')) }
+  onError () { this.addLine(boldRed('An unknown error occurred.')) }
+  onReconnectFailed () { this.addLine(boldRed('Unable to reconnect to server.')) }
+  onReconnect () {}
+  onReconnecting () {}
 
-  onOutput(msg) {
+  onOutput (msg) {
     if (msg && msg.toString) {
-      this.addLine(msg.toString());
-      if (this.space()) { this.addLine(' '); }
+      this.addLine(msg.toString())
+      if (this.space()) { this.addLine(' ') }
     }
   }
 
-  onSetPrompt(str) {
-    this.setPrompt(str);
+  onSetPrompt (str) {
+    this.setPrompt(str)
   }
 
-  onEditVerb(data) {
-    this.parentViewModel.parentViewModel.newEditVerbTab(this.socket, data);
+  onEditVerb (data) {
+    this.parentViewModel.parentViewModel.newEditVerbTab(this.socket, data)
   }
 
-  onEditFunction(data) {
-    this.parentViewModel.parentViewModel.newEditFunctionTab(this.socket, data);
+  onEditFunction (data) {
+    this.parentViewModel.parentViewModel.newEditFunctionTab(this.socket, data)
   }
 
-  onLogin() {
-    this.loggedIn(true);
+  onLogin () {
+    this.loggedIn(true)
   }
 
-  onLogout() {
-    this.loggedIn(false);
+  onLogout () {
+    this.loggedIn(false)
   }
 
-  onPlaying() {
-    this.playing(true);
+  onPlaying () {
+    this.playing(true)
   }
 
-  onQuit() {
-    this.playing(false);
+  onQuit () {
+    this.playing(false)
   }
 
-  onRequestInput(inputs, fn) {
-    const promptWas = this.promptStr();
+  onRequestInput (inputs, fn) {
+    const promptWas = this.promptStr()
     this.getInputFromUser({}, inputs, formData => {
-      this.setPrompt(promptWas, 'text');
-      fn(formData);
-    });
+      this.setPrompt(promptWas, 'text')
+      fn(formData)
+    })
   }
 
   // Helpers for the above
 
-  getInputFromUser(data, inputs, done) {
-    if (inputs.length === 0) { done(data); return; }
+  getInputFromUser (data, inputs, done) {
+    if (inputs.length === 0) { done(data); return }
 
-    const [input, ...restInputs] = inputs;
+    const [input, ...restInputs] = inputs
 
-    this.setPrompt(input.label || 'input', input.type || 'text');
+    this.setPrompt(input.label || 'input', input.type || 'text')
 
     this.inputCallback = userInput => {
-      data[input.name || 'input'] = userInput;
-      this.getInputFromUser(data, restInputs, done);
-    };
+      data[input.name || 'input'] = userInput
+      this.getInputFromUser(data, restInputs, done)
+    }
   }
 
   // Local storage helpers
 
-  readConfig(key) {
-    return this.window.localStorage ? JSON.parse(this.window.localStorage.getItem(key)) : null;
+  readConfig (key) {
+    return this.window.localStorage ? JSON.parse(this.window.localStorage.getItem(key)) : null
   }
 
-  writeConfig(key, value) {
+  writeConfig (key, value) {
     if (this.window.localStorage) {
-      this.window.localStorage.setItem(key, JSON.stringify(value));
+      this.window.localStorage.setItem(key, JSON.stringify(value))
     }
   }
 
   // Color and HTML helpers
 
-  linkifyCommands(str) {
-    const pattern = /#cmd\[(.*?)]/g;
-    return str.replace(pattern, (match, capture) => `<a href='${match}'>${capture}</a>`);
+  linkifyCommands (str) {
+    const pattern = /#cmd\[(.*?)]/g
+    return str.replace(pattern, (match, capture) => `<a href='${match}'>${capture}</a>`)
   }
 
-  colorize(str) {
-    return this.linkifyCommands(this.linkifyHtml(ansiToHtml(str, { use_classes: true })));
+  colorize (str) {
+    return this.linkifyCommands(this.linkifyHtml(ansiToHtml(str, { use_classes: true })))
   }
 
-  escapeHTML(str) {
-    return escapeForHtml(str);
+  escapeHTML (str) {
+    return escapeForHtml(str)
   }
 }
