@@ -1,8 +1,8 @@
-import json from 'rollup-plugin-json';
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import nodeResolve from 'rollup-plugin-node-resolve';
-import uglify from 'rollup-plugin-uglify';
+import json from 'rollup-plugin-json'
+import babel from 'rollup-plugin-babel'
+import commonjs from 'rollup-plugin-commonjs'
+import nodeResolve from 'rollup-plugin-node-resolve'
+import uglify from 'rollup-plugin-uglify'
 
 export default {
   entry: 'src/main.js',
@@ -19,11 +19,11 @@ export default {
     }),
 
     commonjs({
-      include: 'node_modules/**',
+      include: 'node_modules/**'
     }),
 
-    uglify(),
+    uglify()
   ],
   dest: 'dist/js/bundle.js',
-  moduleName: 'bundle',
-};
+  moduleName: 'bundle'
+}

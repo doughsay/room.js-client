@@ -1,13 +1,13 @@
 export default class FunctionEditorViewModel {
-  constructor({ ko, CodeMirror, win }, parentViewModel, socket, { objectId, src, name }) {
+  constructor ({ ko, CodeMirror, win }, parentViewModel, socket, { objectId, src, name }) {
     // Properties
 
-    this.window = win;
-    this.parentViewModel = parentViewModel;
-    this.socket = socket;
-    this.objectId = objectId;
-    this.src = src;
-    this.name = name;
+    this.window = win
+    this.parentViewModel = parentViewModel
+    this.socket = socket
+    this.objectId = objectId
+    this.src = src
+    this.name = name
     this.codemirrorOptions = {
       lineNumbers: true,
       theme: 'tomorrow-night-bright',
@@ -16,76 +16,76 @@ export default class FunctionEditorViewModel {
       extraKeys: {
         Tab: cm => {
           if (cm.doc.somethingSelected()) {
-            return CodeMirror.Pass;
+            return CodeMirror.Pass
           }
-          return cm.execCommand('insertSoftTab');
-        },
-      },
-    };
+          return cm.execCommand('insertSoftTab')
+        }
+      }
+    }
 
     // Observables
 
-    this.code = ko.observable(this.src);
-    this._code = ko.observable(this.src);
+    this.code = ko.observable(this.src)
+    this._code = ko.observable(this.src)
 
     // Computeds
 
-    this.dirty = ko.computed(() => this.code() !== this._code());
+    this.dirty = ko.computed(() => this.code() !== this._code())
   }
 
-  save() {
+  save () {
     const params = {
       name: this.name,
       src: this.code(),
-      objectId: this.objectId,
-    };
+      objectId: this.objectId
+    }
 
     if (!this.socket.connected) {
       // eslint-disable-next-line no-alert
       this.window.alert([
         'The client tab that this editor was opened from has been',
-        'closed.  You must keep that open for saving to work.',
-      ].join(' '));
-      return;
+        'closed.  You must keep that open for saving to work.'
+      ].join(' '))
+      return
     }
 
     this.socket.emit('save-function', params, response => {
       if (response === 'saved') {
-        this._code(this.code());
+        this._code(this.code())
       } else {
         // eslint-disable-next-line no-alert
-        this.window.alert(response);
+        this.window.alert(response)
       }
-    });
+    })
   }
 
-  willClose() {
+  willClose () {
     const msg = [
       'Are you sure you want to close this tab?',
-      'You have unsaved changes that will be lost.',
-    ].join(' ');
+      'You have unsaved changes that will be lost.'
+    ].join(' ')
 
     return this.dirty()
       // eslint-disable-next-line no-alert
       ? this.window.confirm(msg)
-      : true;
+      : true
   }
 
-  onKeyDown(_, event) {
-    const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
-    const meta = event.metaKey;
-    const ctrl = event.ctrlKey;
-    const sKey = key === 83;
-    const wKey = key === 87;
+  onKeyDown (_, event) {
+    const key = typeof event.which === 'undefined' ? event.keyCode : event.which
+    const meta = event.metaKey
+    const ctrl = event.ctrlKey
+    const sKey = key === 83
+    const wKey = key === 87
 
     if ((ctrl && sKey) || (meta && sKey)) {
-      this.save();
-      return false;
+      this.save()
+      return false
     } else if ((ctrl && wKey) || (meta && wKey)) {
       // this would be nice, but this is one shortcut you can't override...
-      this.parentViewModel.close();
-      return false;
+      this.parentViewModel.close()
+      return false
     }
-    return true;
+    return true
   }
 }

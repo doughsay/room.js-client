@@ -1,184 +1,184 @@
-import ClientTabViewModel from './client-tab-view-model';
-import VerbEditorTabViewModel from './verb-editor-tab-view-model';
-import FunctionEditorTabViewModel from './function-editor-tab-view-model';
-import SearchViewModel from './search-view-model';
+import ClientTabViewModel from './client-tab-view-model'
+import VerbEditorTabViewModel from './verb-editor-tab-view-model'
+import FunctionEditorTabViewModel from './function-editor-tab-view-model'
+import SearchViewModel from './search-view-model'
 
 export default class TabsViewModel {
-  constructor(deps) {
-    const { ko } = deps;
-    this.deps = deps;
+  constructor (deps) {
+    const { ko } = deps
+    this.deps = deps
 
     // Observables
 
-    this.activeTab = ko.observable();
-    this.tabs = ko.observableArray([]);
-    this.searchViewModel = ko.observable();
+    this.activeTab = ko.observable()
+    this.tabs = ko.observableArray([])
+    this.searchViewModel = ko.observable()
 
     // Computeds
 
-    this.activeViewModel = ko.computed(this.computeActiveViewModel.bind(this));
-    this.hidden = ko.computed(this.computeHidden.bind(this));
-    this.visible = ko.computed(this.computeVisible.bind(this));
-    this.tabPaneClasses = ko.computed(this.computeTabPaneClasses.bind(this));
-    this.templateBinding = ko.computed(this.computeTemplateBinding.bind(this));
-    this.activeSocket = ko.computed(this.computeActiveSocket.bind(this));
-    this.anyTabLoggedIn = ko.computed(this.computedAnyTabLoggedIn.bind(this));
+    this.activeViewModel = ko.computed(this.computeActiveViewModel.bind(this))
+    this.hidden = ko.computed(this.computeHidden.bind(this))
+    this.visible = ko.computed(this.computeVisible.bind(this))
+    this.tabPaneClasses = ko.computed(this.computeTabPaneClasses.bind(this))
+    this.templateBinding = ko.computed(this.computeTemplateBinding.bind(this))
+    this.activeSocket = ko.computed(this.computeActiveSocket.bind(this))
+    this.anyTabLoggedIn = ko.computed(this.computedAnyTabLoggedIn.bind(this))
 
     // Initialization
 
-    this.activeTab(this.tabs()[0]);
+    this.activeTab(this.tabs()[0])
   }
 
-  computeActiveViewModel() {
-    const searchViewModel = this.searchViewModel();
+  computeActiveViewModel () {
+    const searchViewModel = this.searchViewModel()
     if (searchViewModel) {
-      return searchViewModel;
+      return searchViewModel
     }
-    const activeTab = this.activeTab();
-    return activeTab ? activeTab.viewModel : this;
+    const activeTab = this.activeTab()
+    return activeTab ? activeTab.viewModel : this
   }
 
-  computeHidden() {
-    const l = this.tabs().length;
-    const t = this.tabs()[0];
+  computeHidden () {
+    const l = this.tabs().length
+    const t = this.tabs()[0]
 
-    return l === 0 || (l === 1 && t.hideIfOnlyMe());
+    return l === 0 || (l === 1 && t.hideIfOnlyMe())
   }
 
-  computeVisible() {
-    return !this.hidden();
+  computeVisible () {
+    return !this.hidden()
   }
 
-  computeTabPaneClasses() {
-    const activeTab = this.activeTab();
-    let classes;
+  computeTabPaneClasses () {
+    const activeTab = this.activeTab()
+    let classes
 
     if (activeTab) {
-      classes = activeTab.tabPaneClasses();
+      classes = activeTab.tabPaneClasses()
     } else {
-      classes = [];
+      classes = []
     }
 
     if (this.visible()) {
-      classes.push('tabs-visible');
+      classes.push('tabs-visible')
     }
 
-    return classes.join(' ');
+    return classes.join(' ')
   }
 
-  computeTemplateBinding() {
-    const activeTab = this.activeTab();
+  computeTemplateBinding () {
+    const activeTab = this.activeTab()
     if (activeTab) {
-      return activeTab.templateBinding();
+      return activeTab.templateBinding()
     }
-    return { name: 'no-tabs', data: this };
+    return { name: 'no-tabs', data: this }
   }
 
-  computeActiveSocket() {
-    const activeViewModel = this.activeViewModel();
-    return activeViewModel.socket;
+  computeActiveSocket () {
+    const activeViewModel = this.activeViewModel()
+    return activeViewModel.socket
   }
 
-  computedAnyTabLoggedIn() {
+  computedAnyTabLoggedIn () {
     return this.tabs().reduce((result, tab) =>
       result || (tab.viewModel && tab.viewModel.loggedIn && tab.viewModel.loggedIn())
-    , false);
+    , false)
   }
 
-  tabPaneClasses() {
-    return [];
+  tabPaneClasses () {
+    return []
   }
 
-  newClientTab() {
-    this.addAndSelectTab(new ClientTabViewModel(this.deps, this));
+  newClientTab () {
+    this.addAndSelectTab(new ClientTabViewModel(this.deps, this))
   }
 
-  newEditVerbTab(...args) {
-    this.newEditTab(VerbEditorTabViewModel, ...args);
+  newEditVerbTab (...args) {
+    this.newEditTab(VerbEditorTabViewModel, ...args)
   }
 
-  newEditFunctionTab(...args) {
-    this.newEditTab(FunctionEditorTabViewModel, ...args);
+  newEditFunctionTab (...args) {
+    this.newEditTab(FunctionEditorTabViewModel, ...args)
   }
 
-  newEditTab(EditorTabViewModel, socket, data) {
-    const tabName = EditorTabViewModel.tabName(data);
+  newEditTab (EditorTabViewModel, socket, data) {
+    const tabName = EditorTabViewModel.tabName(data)
 
     if (this.selectExistingTab(tabName)) {
-      return;
+      return
     }
 
-    this.addAndSelectTab(new EditorTabViewModel(this.deps, this, socket, data));
+    this.addAndSelectTab(new EditorTabViewModel(this.deps, this, socket, data))
   }
 
-  addAndSelectTab(tab) {
-    this.tabs.push(tab);
-    tab.select();
+  addAndSelectTab (tab) {
+    this.tabs.push(tab)
+    tab.select()
   }
 
-  selectExistingTab(name) {
-    let selected = false;
+  selectExistingTab (name) {
+    let selected = false
 
     this.tabs().forEach(tab => {
       if (tab.name() === name) {
-        tab.select();
-        selected = true;
+        tab.select()
+        selected = true
       }
-    });
+    })
 
-    return selected;
+    return selected
   }
 
-  closeTab(tab) {
-    const l = this.tabs().length - 1;
-    let i = this.tabs.indexOf(tab);
+  closeTab (tab) {
+    const l = this.tabs().length - 1
+    let i = this.tabs.indexOf(tab)
 
-    if (i === l) { i -= 1; }
-    this.tabs.remove(tab);
+    if (i === l) { i -= 1 }
+    this.tabs.remove(tab)
     if (l > 0) {
-      this.tabs()[i].select();
+      this.tabs()[i].select()
     } else {
-      this.activeTab(null);
+      this.activeTab(null)
     }
   }
 
-  closeSameTabs(tab) {
+  closeSameTabs (tab) {
     // Close other tabs with same names, only if they are not edited
     this.tabs().forEach(t => {
       if (t.name() === tab.name() && !t.dirty()) {
-        this.closeTab(t);
+        this.closeTab(t)
       }
-    });
+    })
   }
 
-  onKeyDown(...args) {
-    const event = args[1];
-    const activeViewModel = this.activeViewModel();
-    const key = typeof event.which === 'undefined' ? event.keyCode : event.which;
-    const meta = event.metaKey;
-    const ctrl = event.ctrlKey;
-    const pKey = key === 80;
+  onKeyDown (...args) {
+    const event = args[1]
+    const activeViewModel = this.activeViewModel()
+    const key = typeof event.which === 'undefined' ? event.keyCode : event.which
+    const meta = event.metaKey
+    const ctrl = event.ctrlKey
+    const pKey = key === 80
 
     // open the search box on cmd+p (or ctrl+p) if it's not already open
     if ((meta && pKey) || (ctrl && pKey)) {
       if (!this.searchViewModel()) {
-        this.searchViewModel(new SearchViewModel(this.deps, this, this.activeSocket()));
+        this.searchViewModel(new SearchViewModel(this.deps, this, this.activeSocket()))
       }
-      return false;
+      return false
     }
 
     if (activeViewModel !== this && activeViewModel.onKeyDown) {
-      return activeViewModel.onKeyDown(...args);
+      return activeViewModel.onKeyDown(...args)
     }
-    return true;
+    return true
   }
 
-  onKeyUp(...args) {
-    const activeViewModel = this.activeViewModel();
+  onKeyUp (...args) {
+    const activeViewModel = this.activeViewModel()
 
     if (activeViewModel !== this && activeViewModel.onKeyUp) {
-      return activeViewModel.onKeyUp(...args);
+      return activeViewModel.onKeyUp(...args)
     }
-    return true;
+    return true
   }
 }

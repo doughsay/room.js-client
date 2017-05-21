@@ -1,48 +1,48 @@
-import FunctionEditorViewModel from './function-editor-view-model';
+import FunctionEditorViewModel from './function-editor-view-model'
 
 export default class FunctionEditorTabViewModel {
-  constructor(deps, parentViewModel, socket, data) {
-    const { ko } = deps;
+  constructor (deps, parentViewModel, socket, data) {
+    const { ko } = deps
 
     // Properties
 
-    this.parentViewModel = parentViewModel;
-    this.templateId = 'function-editor';
-    this.viewModel = new FunctionEditorViewModel(deps, this, socket, data);
+    this.parentViewModel = parentViewModel
+    this.templateId = 'function-editor'
+    this.viewModel = new FunctionEditorViewModel(deps, this, socket, data)
 
     // Observables
 
-    this.name = ko.observable(FunctionEditorTabViewModel.tabName(data));
+    this.name = ko.observable(FunctionEditorTabViewModel.tabName(data))
 
     // Computeds
 
-    this.active = ko.computed(() => parentViewModel.activeTab() === this);
-    this.dirty = ko.computed(() => this.viewModel.dirty());
+    this.active = ko.computed(() => parentViewModel.activeTab() === this)
+    this.dirty = ko.computed(() => this.viewModel.dirty())
   }
 
-  templateBinding() {
-    return { name: this.templateId, data: this.viewModel };
+  templateBinding () {
+    return { name: this.templateId, data: this.viewModel }
   }
 
-  select() {
-    this.parentViewModel.activeTab(this);
+  select () {
+    this.parentViewModel.activeTab(this)
   }
 
-  close() {
+  close () {
     if (this.viewModel.willClose()) {
-      this.parentViewModel.closeTab(this);
+      this.parentViewModel.closeTab(this)
     }
   }
 
-  tabPaneClasses() {
-    return ['tab-pane-editor', 'tab-pane-function-editor'];
+  tabPaneClasses () {
+    return ['tab-pane-editor', 'tab-pane-function-editor']
   }
 
-  hideIfOnlyMe() {
-    return false;
+  hideIfOnlyMe () {
+    return false
   }
 
-  static tabName(data) {
-    return `${data.objectId}.${data.name}`;
+  static tabName (data) {
+    return `${data.objectId}.${data.name}`
   }
 }
