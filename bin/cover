@@ -9,3 +9,6 @@ cat ./coverage/coverage.json | ./node_modules/.bin/remap-istanbul -o ./coverage/
 # replace original with remapped
 rm ./coverage/lcov.info
 mv ./coverage/lcov-remapped.info ./coverage/lcov.info
+
+# remove json coverage so codecov uses lcov.info only
+rm ./coverage/coverage.json
