@@ -229,7 +229,7 @@ export default class ClientViewModel {
 
   onClick(_, event) {
     if (event.target && event.target.hash) {
-      const pattern = /#cmd\[(.*?)\]/g;
+      const pattern = /#cmd\[(.*?)]/g;
       const match = pattern.exec(event.target.hash);
       if (!match) { return true; }
       const command = decodeURIComponent(match[1]); // URI-encoded on some browsers (e.g. Firefox)
@@ -361,7 +361,7 @@ export default class ClientViewModel {
   // Color and HTML helpers
 
   linkifyCommands(str) {
-    const pattern = /#cmd\[(.*?)\]/g;
+    const pattern = /#cmd\[(.*?)]/g;
     return str.replace(pattern, (match, capture) => `<a href='${match}'>${capture}</a>`);
   }
 
