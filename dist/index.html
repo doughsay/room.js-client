@@ -49,7 +49,7 @@
         </div>
         <div class='command'>
           <form data-bind='submit: sendCommand'>
-            <span class='prompt' data-bind='html: promptFormatted'></span><input autofocus=true data-bind="value: command, hasFocus: inputHasFocus, attr: {type: inputType}, event: {keydown: onRecall}">
+            <span class='prompt' data-bind='html: promptFormatted'></span><input autofocus=true data-bind="value: command, hasFocus: inputHasFocus, attr: {type: inputType}, event: {keydown: onRecall}"><span class='prompt' data-bind='html: rightPromptFormatted'></span>
           </form>
         </div>
       </div>

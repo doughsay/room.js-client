@@ -1,7 +1,5 @@
-import ansiUp from 'ansi_up'
+import AnsiUp from 'ansi_up'
 import { boldRed, boldGreen, gray } from '../lib/colors'
-
-const { ansi_to_html: ansiToHtml, escape_for_html: escapeForHtml } = ansiUp
 
 export default class ClientViewModel {
   constructor (deps, parentViewModel) {
@@ -10,6 +8,8 @@ export default class ClientViewModel {
 
     this.window = win
     this.linkifyHtml = linkifyHtml
+    this.ansiUp = new AnsiUp()
+    this.ansiUp.use_classes = true
 
     // Elements
 
@@ -35,6 +35,7 @@ export default class ClientViewModel {
     this.command = observable('')
     this.inputType = observable('text')
     this.promptStr = observable('')
+    this.rightPromptStr = observable('')
     this.inputHasFocus = observable(true)
     this.loggedIn = observable(false)
     this.playing = observable(false)
@@ -47,7 +48,8 @@ export default class ClientViewModel {
 
     // Computeds
 
-    this.promptFormatted = computed(() => this.colorize(this.escapeHTML(this.composedPrompt())))
+    this.promptFormatted = computed(() => this.colorize(this.composedPrompt()))
+    this.rightPromptFormatted = computed(() => this.colorize(this.rightPromptStr()))
 
     // Subscribers
 
@@ -74,6 +76,7 @@ export default class ClientViewModel {
     this.socket.on('reconnecting', this.onReconnecting.bind(this))
     this.socket.on('output', this.onOutput.bind(this))
     this.socket.on('set-prompt', this.onSetPrompt.bind(this))
+    this.socket.on('set-right-prompt', this.onSetRightPrompt.bind(this))
     this.socket.on('request-input', this.onRequestInput.bind(this))
     this.socket.on('edit-verb', this.onEditVerb.bind(this))
     this.socket.on('edit-function', this.onEditFunction.bind(this))
@@ -92,6 +95,10 @@ export default class ClientViewModel {
   setPrompt (str, type) {
     this.promptStr(str)
     if (type) { this.inputType(type) }
+  }
+
+  setRightPrompt (str) {
+    this.rightPromptStr(str)
   }
 
   sendCommand () {
@@ -150,7 +157,7 @@ export default class ClientViewModel {
   }
 
   addLine (line) {
-    this.lines.push(this.colorize(this.escapeHTML(line)))
+    this.lines.push(this.colorize(line))
     this.scrollToBottom()
   }
 
@@ -299,6 +306,10 @@ export default class ClientViewModel {
     this.setPrompt(str)
   }
 
+  onSetRightPrompt (str) {
+    this.setRightPrompt(str)
+  }
+
   onEditVerb (data) {
     this.parentViewModel.parentViewModel.newEditVerbTab(this.socket, data)
   }
@@ -366,10 +377,6 @@ export default class ClientViewModel {
   }
 
   colorize (str) {
-    return this.linkifyCommands(this.linkifyHtml(ansiToHtml(str, { use_classes: true })))
-  }
-
-  escapeHTML (str) {
-    return escapeForHtml(str)
+    return this.linkifyCommands(this.linkifyHtml(this.ansiUp.ansi_to_html(str)))
   }
 }
