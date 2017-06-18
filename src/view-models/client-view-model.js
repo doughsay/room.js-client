@@ -1,7 +1,5 @@
-import ansiUp from 'ansi_up'
+import AnsiUp from 'ansi_up'
 import { boldRed, boldGreen, gray } from '../lib/colors'
-
-const { ansi_to_html: ansiToHtml, escape_for_html: escapeForHtml } = ansiUp
 
 export default class ClientViewModel {
   constructor (deps, parentViewModel) {
@@ -10,6 +8,8 @@ export default class ClientViewModel {
 
     this.window = win
     this.linkifyHtml = linkifyHtml
+    this.ansiUp = new AnsiUp()
+    this.ansiUp.use_classes = true
 
     // Elements
 
@@ -48,8 +48,8 @@ export default class ClientViewModel {
 
     // Computeds
 
-    this.promptFormatted = computed(() => this.colorize(this.escapeHTML(this.composedPrompt())))
-    this.rightPromptFormatted = computed(() => this.colorize(this.escapeHTML(this.rightPromptStr())))
+    this.promptFormatted = computed(() => this.colorize(this.composedPrompt()))
+    this.rightPromptFormatted = computed(() => this.colorize(this.rightPromptStr()))
 
     // Subscribers
 
@@ -157,7 +157,7 @@ export default class ClientViewModel {
   }
 
   addLine (line) {
-    this.lines.push(this.colorize(this.escapeHTML(line)))
+    this.lines.push(this.colorize(line))
     this.scrollToBottom()
   }
 
@@ -377,10 +377,6 @@ export default class ClientViewModel {
   }
 
   colorize (str) {
-    return this.linkifyCommands(this.linkifyHtml(ansiToHtml(str, { use_classes: true })))
-  }
-
-  escapeHTML (str) {
-    return escapeForHtml(str)
+    return this.linkifyCommands(this.linkifyHtml(this.ansiUp.ansi_to_html(str)))
   }
 }
