@@ -1,10 +1,16 @@
-'use strict';
+"use strict";
 
 ;(function (window, linkify) {
   var linkifyHtml = function (linkify) {
     'use strict';
 
-    var HTML5NamedCharRefs = {};
+    var HTML5NamedCharRefs = {
+      // We don't need the complete named character reference because linkifyHtml
+      // does not modify the escape sequences. We do need &nbsp; so that
+      // whitespace is parsed properly. Other types of whitespace should already
+      // be accounted for
+      nbsp: "\xA0"
+    };
 
     function EntityParser(named) {
       this.named = named;
@@ -20,15 +26,15 @@
       }
       var matches = entity.match(HEXCHARCODE);
       if (matches) {
-        return '&#x' + matches[1] + ';';
+        return "&#x" + matches[1] + ";";
       }
       matches = entity.match(CHARCODE);
       if (matches) {
-        return '&#' + matches[1] + ';';
+        return "&#" + matches[1] + ";";
       }
       matches = entity.match(NAMED);
       if (matches) {
-        return '&' + matches[1] + ';';
+        return this.named[matches[1]] || "&" + matches[1] + ";";
       }
     };
 
@@ -131,14 +137,27 @@
         var entity = this.input.slice(this.index, endIndex);
         var chars = this.entityParser.parse(entity);
         if (chars) {
-          this.index = endIndex + 1;
+          var count = entity.length;
+          // consume the entity chars
+          while (count) {
+            this.consume();
+            count--;
+          }
+          // consume the `;`
+          this.consume();
+
           return chars;
         }
       },
 
       markTagStart: function markTagStart() {
+        // these properties to be removed in next major bump
         this.tagLine = this.line;
         this.tagColumn = this.column;
+
+        if (this.delegate.tagOpen) {
+          this.delegate.tagOpen();
+        }
       },
 
       states: {
@@ -190,7 +209,7 @@
           var char = this.consume();
 
           if (char === "-" && this.input.charAt(this.index) === "-") {
-            this.index++;
+            this.consume();
             this.state = 'commentStart';
             this.delegate.beginComment();
           }
@@ -273,62 +292,76 @@
         },
 
         beforeAttributeName: function beforeAttributeName() {
-          var char = this.consume();
+          var char = this.peek();
 
           if (isSpace(char)) {
+            this.consume();
             return;
           } else if (char === "/") {
             this.state = 'selfClosingStartTag';
+            this.consume();
           } else if (char === ">") {
+            this.consume();
             this.delegate.finishTag();
             this.state = 'beforeData';
           } else {
             this.state = 'attributeName';
             this.delegate.beginAttribute();
+            this.consume();
             this.delegate.appendToAttributeName(char);
           }
         },
 
         attributeName: function attributeName() {
-          var char = this.consume();
+          var char = this.peek();
 
           if (isSpace(char)) {
             this.state = 'afterAttributeName';
+            this.consume();
           } else if (char === "/") {
             this.delegate.beginAttributeValue(false);
             this.delegate.finishAttributeValue();
+            this.consume();
             this.state = 'selfClosingStartTag';
           } else if (char === "=") {
             this.state = 'beforeAttributeValue';
+            this.consume();
           } else if (char === ">") {
             this.delegate.beginAttributeValue(false);
             this.delegate.finishAttributeValue();
+            this.consume();
             this.delegate.finishTag();
             this.state = 'beforeData';
           } else {
+            this.consume();
             this.delegate.appendToAttributeName(char);
           }
         },
 
         afterAttributeName: function afterAttributeName() {
-          var char = this.consume();
+          var char = this.peek();
 
           if (isSpace(char)) {
+            this.consume();
             return;
           } else if (char === "/") {
             this.delegate.beginAttributeValue(false);
             this.delegate.finishAttributeValue();
+            this.consume();
             this.state = 'selfClosingStartTag';
           } else if (char === "=") {
+            this.consume();
             this.state = 'beforeAttributeValue';
           } else if (char === ">") {
             this.delegate.beginAttributeValue(false);
             this.delegate.finishAttributeValue();
+            this.consume();
             this.delegate.finishTag();
             this.state = 'beforeData';
           } else {
             this.delegate.beginAttributeValue(false);
             this.delegate.finishAttributeValue();
+            this.consume();
             this.state = 'attributeName';
             this.delegate.beginAttribute();
             this.delegate.appendToAttributeName(char);
@@ -336,22 +369,28 @@
         },
 
         beforeAttributeValue: function beforeAttributeValue() {
-          var char = this.consume();
+          var char = this.peek();
 
-          if (isSpace(char)) {} else if (char === '"') {
+          if (isSpace(char)) {
+            this.consume();
+          } else if (char === '"') {
             this.state = 'attributeValueDoubleQuoted';
             this.delegate.beginAttributeValue(true);
+            this.consume();
           } else if (char === "'") {
             this.state = 'attributeValueSingleQuoted';
             this.delegate.beginAttributeValue(true);
+            this.consume();
           } else if (char === ">") {
             this.delegate.beginAttributeValue(false);
             this.delegate.finishAttributeValue();
+            this.consume();
             this.delegate.finishTag();
             this.state = 'beforeData';
           } else {
             this.state = 'attributeValueUnquoted';
             this.delegate.beginAttributeValue(false);
+            this.consume();
             this.delegate.appendToAttributeValue(char);
           }
         },
@@ -383,18 +422,22 @@
         },
 
         attributeValueUnquoted: function attributeValueUnquoted() {
-          var char = this.consume();
+          var char = this.peek();
 
           if (isSpace(char)) {
             this.delegate.finishAttributeValue();
+            this.consume();
             this.state = 'beforeAttributeName';
           } else if (char === "&") {
+            this.consume();
             this.delegate.appendToAttributeValue(this.consumeCharRef(">") || "&");
           } else if (char === ">") {
             this.delegate.finishAttributeValue();
+            this.consume();
             this.delegate.finishTag();
             this.state = 'beforeData';
           } else {
+            this.consume();
             this.delegate.appendToAttributeValue(char);
           }
         },
@@ -585,7 +628,7 @@
       finishAttributeValue: function finishAttributeValue() {}
     };
 
-    function tokenize(input, options) {
+    function tokenize$1(input, options) {
       var tokenizer = new Tokenizer(new EntityParser(HTML5NamedCharRefs), options);
       return tokenizer.tokenize(input);
     }
@@ -595,7 +638,7 @@
       EntityParser: EntityParser,
       EventedTokenizer: EventedTokenizer,
       Tokenizer: Tokenizer,
-      tokenize: tokenize
+      tokenize: tokenize$1
     };
 
     var options = linkify.options;
@@ -612,7 +655,7 @@
     	parser.
     */
     function linkifyHtml(str) {
-      var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       var tokens = HTML5Tokenizer.tokenize(str);
       var linkifiedTokens = [];
@@ -664,13 +707,13 @@
             linkified.push(link);
             break;
           case EndTag:
-            linkified.push('</' + _token.tagName + '>');
+            linkified.push("</" + _token.tagName + ">");
             break;
           case Chars:
             linkified.push(escapeText(_token.chars));
             break;
           case Comment:
-            linkified.push('<!--' + escapeText(_token.chars) + '-->');
+            linkified.push("<!--" + escapeText(_token.chars) + "-->");
             break;
         }
       }
@@ -702,17 +745,17 @@
           continue;
         }
 
-        var _opts$resolve = opts.resolve(token);
-
-        var href = _opts$resolve.href;
-        var formatted = _opts$resolve.formatted;
-        var formattedHref = _opts$resolve.formattedHref;
-        var tagName = _opts$resolve.tagName;
-        var className = _opts$resolve.className;
-        var target = _opts$resolve.target;
-        var attributes = _opts$resolve.attributes;
+        var _opts$resolve = opts.resolve(token),
+            href = _opts$resolve.href,
+            formatted = _opts$resolve.formatted,
+            formattedHref = _opts$resolve.formattedHref,
+            tagName = _opts$resolve.tagName,
+            className = _opts$resolve.className,
+            target = _opts$resolve.target,
+            attributes = _opts$resolve.attributes;
 
         // Build up attributes
+
 
         var attributeArray = [['href', formattedHref]];
 
@@ -763,6 +806,7 @@
 
       while (i < tokens.length && stackCount > 0) {
         var token = tokens[i];
+
         if (token.type === StartTag && token.tagName.toUpperCase() === tagName) {
           // Nested tag of the same type, "add to stack"
           stackCount++;
@@ -770,6 +814,7 @@
           // Closing tag
           stackCount--;
         }
+
         skippedTokens.push(token);
         i++;
       }
@@ -790,16 +835,17 @@
     function attrsToStrings(attrs) {
       var attrStrs = [];
       for (var i = 0; i < attrs.length; i++) {
-        var _attrs$i = attrs[i];
-        var name = _attrs$i[0];
-        var value = _attrs$i[1];
+        var _attrs$i = attrs[i],
+            name = _attrs$i[0],
+            value = _attrs$i[1];
 
-        attrStrs.push(name + '="' + escapeAttr(value) + '"');
+        attrStrs.push(name + "=\"" + escapeAttr(value) + "\"");
       }
       return attrStrs;
     }
 
     return linkifyHtml;
   }(linkify);
+
   window.linkifyHtml = linkifyHtml;
 })(window, linkify);
