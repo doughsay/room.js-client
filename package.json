@@ -3,6 +3,7 @@
   "version": "2.1.0",
   "description": "Room.js client.",
   "scripts": {
+    "deps": "yarn && ./node_modules/.bin/bower install",
     "build": "./bin/build",
     "lint": "./node_modules/.bin/standard",
     "test": "./bin/test",
@@ -29,13 +30,13 @@
     "rollup": "^0.43.0",
     "rollup-plugin-babel": "^2.4.0",
     "rollup-plugin-commonjs": "^8.0.2",
-    "rollup-plugin-json": "^2.0.0",
+    "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "standard": "^10.0.2",
     "tape": "^4.6.0"
   },
   "dependencies": {
-    "ansi_up": "https://github.com/doughsay/ansi_up.git"
+    "ansi_up": "^2.0.1"
   }
 }

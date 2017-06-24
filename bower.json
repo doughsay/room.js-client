@@ -2,8 +2,8 @@
   "name": "room.js-client",
   "private": true,
   "dependencies": {
-    "codemirror": "^5.18.2",
-    "knockout": "^3.4.0",
-    "linkifyjs": "^2.1.0"
+    "codemirror": "^5.27.2",
+    "knockout": "^3.4.2",
+    "linkifyjs": "^2.1.4"
   }
 }
