@@ -28,4 +28,4 @@ cp bower_components/linkifyjs/linkify-html.js dist/js/
 cp src/favicons/* dist/
 
 # build bundle
-./node_modules/.bin/rollup -c
+./node_modules/.bin/webpack
