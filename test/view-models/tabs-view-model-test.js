@@ -3,7 +3,7 @@ const test = require('tape')
 const ko = require('../../dist/js/knockout.js')
 const { TabsViewModel } = require('../../dist/js/bundle.js').bundle
 
-const { win, doc, io, linkifyHtml } = require('../helpers/mocks')
+const { win, doc, io } = require('../helpers/mocks')
 
 test('TabsViewModel: can be initialized', t => {
   const viewModel = new TabsViewModel({ ko })
@@ -13,7 +13,7 @@ test('TabsViewModel: can be initialized', t => {
 })
 
 test('TabsViewModel: can add a client tab', t => {
-  const viewModel = new TabsViewModel({ ko, win, doc, io, linkifyHtml })
+  const viewModel = new TabsViewModel({ ko, win, doc, io })
 
   viewModel.newClientTab()
 

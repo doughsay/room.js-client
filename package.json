@@ -36,6 +36,7 @@
     "webpack": "^3.0.0"
   },
   "dependencies": {
-    "ansi_up": "https://github.com/doughsay/ansi_up.git#fix-umd"
+    "ansi_up": "https://github.com/doughsay/ansi_up.git#fix-umd",
+    "linkifyjs": "^2.1.4"
   }
 }

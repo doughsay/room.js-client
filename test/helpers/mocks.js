@@ -17,6 +17,4 @@ const io = {
 
 const CodeMirror = {}
 
-const linkifyHtml = (x) => x
-
-module.exports = { win, doc, io, CodeMirror, linkifyHtml }
+module.exports = { win, doc, io, CodeMirror }

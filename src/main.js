@@ -11,7 +11,7 @@ uncloackBinding.register(ko)
 const script = document.createElement('script')
 script.src = SERVER_URI + '/socket.io/socket.io.js"></script>'
 script.addEventListener('load', function () {
-  const { alert, io, linkifyHtml } = window
+  const { alert, io } = window
 
   if (typeof io === 'undefined') {
     alert('Unable to connect to ' + SERVER_URI)
@@ -22,7 +22,6 @@ script.addEventListener('load', function () {
       ko: ko,
       io: io,
       CodeMirror: CodeMirror,
-      linkifyHtml: linkifyHtml,
       SERVER_URI: SERVER_URI
     }
     var viewModel = new TabsViewModel(deps)
