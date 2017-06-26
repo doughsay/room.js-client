@@ -1,9 +1,8 @@
+import ko from 'knockout'
 import FunctionEditorViewModel from './function-editor-view-model'
 
 export default class FunctionEditorTabViewModel {
   constructor (deps, parentViewModel, socket, data) {
-    const { ko } = deps
-
     // Properties
 
     this.parentViewModel = parentViewModel

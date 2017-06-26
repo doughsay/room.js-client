@@ -1,5 +1,7 @@
+import ko from 'knockout'
+
 export default class VerbEditorViewModel {
-  constructor ({ ko, CodeMirror, win }, parentViewModel, socket, { verb, objectId }) {
+  constructor ({ CodeMirror, win }, parentViewModel, socket, { verb, objectId }) {
     // Properties
 
     this.window = win

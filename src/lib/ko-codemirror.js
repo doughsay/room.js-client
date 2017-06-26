@@ -1,4 +1,6 @@
-function register (ko, CodeMirror) {
+import ko from 'knockout'
+
+function register (CodeMirror) {
   function init (element, valueAccessor, allBindings) {
     const options = allBindings.get('codemirrorOptions') || {}
     options.value = ko.unwrap(valueAccessor())

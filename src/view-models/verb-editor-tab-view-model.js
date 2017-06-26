@@ -1,9 +1,8 @@
+import ko from 'knockout'
 import VerbEditorViewModel from './verb-editor-view-model'
 
 export default class VerbEditorTabViewModel {
   constructor (deps, parentViewModel, socket, data) {
-    const { ko } = deps
-
     // Properties
 
     this.parentViewModel = parentViewModel

@@ -1,3 +1,4 @@
+import ko from 'knockout'
 import ClientTabViewModel from './client-tab-view-model'
 import VerbEditorTabViewModel from './verb-editor-tab-view-model'
 import FunctionEditorTabViewModel from './function-editor-tab-view-model'
@@ -5,7 +6,6 @@ import SearchViewModel from './search-view-model'
 
 export default class TabsViewModel {
   constructor (deps) {
-    const { ko } = deps
     this.deps = deps
 
     // Observables

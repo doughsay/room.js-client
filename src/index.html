@@ -125,15 +125,11 @@
         </div>
         <div class='results' data-bind='visible: hasResults'>
           <ol data-bind='foreach: results'>
-            <!-- <li class='active'>Root.tell</li> -->
             <li data-bind='text: name, css: {active: active}'></li>
           </ol>
         </div>
       </div>
     </div>
-
-    <!-- exports global ko -->
-    <script src='js/knockout.js'></script>
 
     <!-- exports global CodeMirror -->
     <script src='js/codemirror.js'></script>

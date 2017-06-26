@@ -1,3 +1,5 @@
+import ko from 'knockout'
+
 function isElementVisibleIn (el, container) {
   const elRect = el.getBoundingClientRect()
   const containerRect = container.getBoundingClientRect()
@@ -11,20 +13,20 @@ function isElementVisibleIn (el, container) {
 }
 
 class SearchResult {
-  constructor (ko, data) {
+  constructor (data) {
     this.data = data
     this.objectId = data.objectId
     this.active = ko.observable(false)
     this.name = ko.computed(this.computeName.bind(this))
   }
 
-  static newFromResult (ko, result) {
+  static newFromResult (result) {
     if (result.function) {
       // eslint-disable-next-line no-use-before-define
-      return new FunctionSearchResult(ko, result)
+      return new FunctionSearchResult(result)
     } else if (result.verb) {
       // eslint-disable-next-line no-use-before-define
-      return new VerbSearchResult(ko, result)
+      return new VerbSearchResult(result)
     }
     throw new Error('Invalid result type.')
   }
@@ -66,9 +68,8 @@ class VerbSearchResult extends SearchResult {
 
 // TODO: socket permissions
 export default class SearchViewModel {
-  constructor ({ doc, ko }, parentViewModel, socket) {
+  constructor ({ doc }, parentViewModel, socket) {
     this.document = doc
-    this.ko = ko
     this.parentViewModel = parentViewModel
     this.socket = socket
     this.inputHasFocus = true
@@ -117,7 +118,7 @@ export default class SearchViewModel {
   onSearch (str) {
     this.socket.emit('search', str, results => {
       this.selectedIndex(0)
-      this.results(results.map(result => SearchResult.newFromResult(this.ko, result)))
+      this.results(results.map(result => SearchResult.newFromResult(result)))
     })
   }
 

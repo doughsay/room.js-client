@@ -1,11 +1,13 @@
+import ko from 'knockout'
 import AnsiUp from 'ansi_up'
 import { boldRed, boldGreen, gray } from '../lib/colors'
 import linkifyHtml from 'linkifyjs/html'
 
+const { observable, observableArray, computed } = ko
+
 export default class ClientViewModel {
   constructor (deps, parentViewModel) {
-    const { SERVER_URI, doc, win, ko, io } = deps
-    const { observable, observableArray, computed } = ko
+    const { SERVER_URI, doc, win, io } = deps
 
     this.window = win
     this.ansiUp = new AnsiUp()

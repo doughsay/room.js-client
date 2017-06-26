@@ -2349,6 +2349,10 @@ kind-of@^4.0.0:
   dependencies:
     is-buffer "^1.1.5"
 
+knockout@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/knockout/-/knockout-3.4.2.tgz#e87958de77ad1e936f7ce645bab8b5d7c456d937"
+
 lazy-cache@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"

@@ -13,7 +13,6 @@ cp src/css/tango-dark.css dist/css/
 
 # copy bower deps
 mkdir -p dist/js
-cp bower_components/knockout/dist/knockout.js dist/js/
 cp bower_components/codemirror/lib/codemirror.js dist/js/
 mkdir -p dist/js/codemirror/modes
 cp bower_components/codemirror/mode/javascript/javascript.js dist/js/codemirror/modes/

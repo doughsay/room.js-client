@@ -2,7 +2,6 @@
   "name": "room.js-client",
   "private": true,
   "dependencies": {
-    "codemirror": "^5.27.2",
-    "knockout": "^3.4.2"
+    "codemirror": "^5.27.2"
   }
 }

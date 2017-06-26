@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "ansi_up": "https://github.com/doughsay/ansi_up.git#fix-umd",
+    "knockout": "^3.4.2",
     "linkifyjs": "^2.1.4"
   }
 }

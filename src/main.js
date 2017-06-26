@@ -1,12 +1,13 @@
+import ko from 'knockout'
 import codemirrorBinding from './lib/ko-codemirror.js'
 import uncloackBinding from './lib/ko-uncloak.js'
 import TabsViewModel from './view-models/tabs-view-model'
 import addSaneOnUnloadHandler from './lib/add-sane-on-unload-handler'
 
-const { ko, CodeMirror, SERVER_URI } = window
+const { CodeMirror, SERVER_URI } = window
 
-codemirrorBinding.register(ko, CodeMirror)
-uncloackBinding.register(ko)
+codemirrorBinding.register(CodeMirror)
+uncloackBinding.register()
 
 const script = document.createElement('script')
 script.src = SERVER_URI + '/socket.io/socket.io.js"></script>'
@@ -19,7 +20,6 @@ script.addEventListener('load', function () {
     var deps = {
       win: window,
       doc: document,
-      ko: ko,
       io: io,
       CodeMirror: CodeMirror,
       SERVER_URI: SERVER_URI
