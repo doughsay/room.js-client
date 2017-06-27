@@ -7,6 +7,7 @@ module.exports = {
     path: path.resolve(__dirname, './dist/js'),
     filename: 'bundle.js'
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -17,6 +18,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new UglifyJSPlugin()
+    new UglifyJSPlugin({ comments: false, sourceMap: true })
   ]
 }

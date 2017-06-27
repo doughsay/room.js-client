@@ -1,22 +1,17 @@
-const test = require('tape')
-
-const ko = require('../../dist/js/knockout.js')
-const { TabsViewModel } = require('../../dist/js/bundle.js').bundle
-
-const { win, doc, io } = require('../helpers/mocks')
+import test from 'ava'
+import { win, doc, io } from '../helpers/mocks'
+import TabsViewModel from '../../src/view-models/tabs-view-model'
 
 test('TabsViewModel: can be initialized', t => {
-  const viewModel = new TabsViewModel({ ko })
+  const viewModel = new TabsViewModel({})
 
-  t.ok(viewModel)
-  t.end()
+  t.truthy(viewModel)
 })
 
 test('TabsViewModel: can add a client tab', t => {
-  const viewModel = new TabsViewModel({ ko, win, doc, io })
+  const viewModel = new TabsViewModel({ win, doc, io })
 
   viewModel.newClientTab()
 
-  t.equal(viewModel.tabs().length, 1)
-  t.end()
+  t.is(viewModel.tabs().length, 1)
 })

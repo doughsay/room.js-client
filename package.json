@@ -3,12 +3,11 @@
   "version": "2.1.0",
   "description": "Room.js client.",
   "scripts": {
-    "deps": "yarn && ./node_modules/.bin/bower install",
+    "deps": "yarn",
     "build": "./bin/build",
-    "lint": "./node_modules/.bin/standard",
-    "test": "./bin/test",
-    "cover": "./bin/cover",
-    "codecov": "./node_modules/.bin/codecov"
+    "lint": "standard",
+    "test": "nyc ava",
+    "codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "author": "Chris Dosé",
   "license": "MIT",
@@ -20,15 +19,26 @@
       "dist/*"
     ]
   },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
   "devDependencies": {
+    "@istanbuljs/nyc-config-babel": "^1.2.2",
+    "ava": "^0.19.1",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.0",
+    "babel-plugin-istanbul": "^4.1.4",
     "babel-preset-latest": "^6.24.1",
+    "babel-register": "^6.24.1",
     "codecov": "^2.2.0",
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",
     "jsdom": "^11.0.0",
     "jsdom-global": "^3.0.2",
+    "nyc": "^11.0.3",
     "remap-istanbul": "^0.9.5",
     "standard": "^10.0.2",
     "tape": "^4.7.0",
