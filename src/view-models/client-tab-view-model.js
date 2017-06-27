@@ -1,9 +1,8 @@
+import ko from 'knockout'
 import ClientViewModel from './client-view-model'
 
 export default class ClientTabViewModel {
   constructor (deps, parentViewModel) {
-    const { ko } = deps
-
     // Properties
 
     this.parentViewModel = parentViewModel

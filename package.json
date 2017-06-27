@@ -3,12 +3,11 @@
   "version": "2.1.0",
   "description": "Room.js client.",
   "scripts": {
-    "deps": "yarn && ./node_modules/.bin/bower install",
+    "deps": "yarn",
     "build": "./bin/build",
-    "lint": "./node_modules/.bin/standard",
-    "test": "./bin/test",
-    "cover": "./bin/cover",
-    "codecov": "./node_modules/.bin/codecov"
+    "lint": "standard",
+    "test": "nyc ava",
+    "codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "author": "Chris Dosé",
   "license": "MIT",
@@ -20,23 +19,37 @@
       "dist/*"
     ]
   },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
   "devDependencies": {
-    "babel-preset-es2015-rollup": "^3.0.0",
-    "bower": "^1.7.7",
+    "@istanbuljs/nyc-config-babel": "^1.2.2",
+    "ava": "^0.19.1",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.0",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-preset-latest": "^6.24.1",
+    "babel-register": "^6.24.1",
     "codecov": "^2.2.0",
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",
+    "jsdom": "^11.0.0",
+    "jsdom-global": "^3.0.2",
+    "nyc": "^11.0.3",
     "remap-istanbul": "^0.9.5",
-    "rollup": "^0.43.0",
-    "rollup-plugin-babel": "^2.4.0",
-    "rollup-plugin-commonjs": "^8.0.2",
-    "rollup-plugin-json": "^2.3.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
     "standard": "^10.0.2",
-    "tape": "^4.6.0"
+    "tape": "^4.7.0",
+    "uglify-js": "^3.0.20",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "webpack": "^3.0.0"
   },
   "dependencies": {
-    "ansi_up": "^2.0.1"
+    "ansi_up": "^2.0.2",
+    "codemirror": "^5.27.2",
+    "knockout": "^3.4.2",
+    "linkifyjs": "^2.1.4"
   }
 }

@@ -7,19 +7,16 @@ cache:
   yarn: true
   directories:
     - node_modules
-    - bower_components
 before_install:
   - yarn global add greenkeeper-lockfile@1
 install:
   - yarn install
-  - ./node_modules/.bin/bower install
 before_script:
   - greenkeeper-lockfile-update
 script:
   - yarn run lint
-  - yarn run build
+  - yarn build
   - yarn test
-  - yarn run cover
   - yarn run codecov
 after_script:
   - greenkeeper-lockfile-upload
