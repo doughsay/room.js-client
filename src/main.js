@@ -4,9 +4,9 @@ import uncloackBinding from './lib/ko-uncloak.js'
 import TabsViewModel from './view-models/tabs-view-model'
 import addSaneOnUnloadHandler from './lib/add-sane-on-unload-handler'
 
-const { CodeMirror, SERVER_URI } = window
+const { SERVER_URI } = window
 
-codemirrorBinding.register(CodeMirror)
+codemirrorBinding.register()
 uncloackBinding.register()
 
 const script = document.createElement('script')
@@ -21,7 +21,6 @@ script.addEventListener('load', function () {
       win: window,
       doc: document,
       io: io,
-      CodeMirror: CodeMirror,
       SERVER_URI: SERVER_URI
     }
     var viewModel = new TabsViewModel(deps)

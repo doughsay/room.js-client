@@ -1,7 +1,8 @@
 import ko from 'knockout'
+import CodeMirror from 'codemirror'
 
 export default class FunctionEditorViewModel {
-  constructor ({ CodeMirror, win }, parentViewModel, socket, { objectId, src, name }) {
+  constructor ({ win }, parentViewModel, socket, { objectId, src, name }) {
     // Properties
 
     this.window = win

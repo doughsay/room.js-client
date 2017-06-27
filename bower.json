@@ -1,7 +1,0 @@
-{
-  "name": "room.js-client",
-  "private": true,
-  "dependencies": {
-    "codemirror": "^5.27.2"
-  }
-}

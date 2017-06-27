@@ -24,10 +24,11 @@
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.0",
     "babel-preset-latest": "^6.24.1",
-    "bower": "^1.7.7",
     "codecov": "^2.2.0",
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",
+    "jsdom": "^11.0.0",
+    "jsdom-global": "^3.0.2",
     "remap-istanbul": "^0.9.5",
     "standard": "^10.0.2",
     "tape": "^4.6.0",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "ansi_up": "https://github.com/doughsay/ansi_up.git#fix-umd",
+    "codemirror": "^5.27.2",
     "knockout": "^3.4.2",
     "linkifyjs": "^2.1.4"
   }
