@@ -147,9 +147,9 @@ ansi-styles@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-1.0.0.tgz#cb102df1c56f5123eab8b67cd7b98027a0279178"
 
-"ansi_up@https://github.com/doughsay/ansi_up.git#fix-umd":
-  version "2.0.1"
-  resolved "https://github.com/doughsay/ansi_up.git#e54d208307e0f4dfcc2c80ac32add476767da833"
+ansi_up@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ansi_up/-/ansi_up-2.0.2.tgz#9b54de508c5c579f5b6968e65c1b863e0680ab92"
 
 anymatch@^1.3.0:
   version "1.3.0"
