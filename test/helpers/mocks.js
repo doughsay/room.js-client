@@ -8,4 +8,4 @@ const io = {
   connect: () => socket
 }
 
-module.exports = { io, win: window, doc: document }
+module.exports = { io, socket, win: window, doc: document }

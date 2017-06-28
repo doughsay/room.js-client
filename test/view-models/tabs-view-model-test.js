@@ -1,5 +1,5 @@
 import test from 'ava'
-import { win, doc, io } from '../helpers/mocks'
+import { win, doc, io, socket } from '../helpers/mocks'
 import TabsViewModel from '../../src/view-models/tabs-view-model'
 
 test('TabsViewModel: can be initialized', t => {
@@ -12,6 +12,37 @@ test('TabsViewModel: can add a client tab', t => {
   const viewModel = new TabsViewModel({ win, doc, io })
 
   viewModel.newClientTab()
+
+  t.is(viewModel.tabs().length, 1)
+})
+
+test('TabsViewModel: can add a function editor tab', t => {
+  const viewModel = new TabsViewModel({ win, doc, io })
+  const data = {
+    objectId: 'foo',
+    src: 'function bar() {}',
+    name: 'bar'
+  }
+
+  viewModel.newEditFunctionTab(socket, data)
+
+  t.is(viewModel.tabs().length, 1)
+})
+
+test('TabsViewModel: can add a verb editor tab', t => {
+  const viewModel = new TabsViewModel({ win, doc, io })
+  const data = {
+    objectId: 'foo',
+    verb: {
+      pattern: 'bar',
+      dobjarg: 'any',
+      preparg: 'any',
+      iobjarg: 'any',
+      code: 'function bar() {}'
+    }
+  }
+
+  viewModel.newEditVerbTab(socket, data)
 
   t.is(viewModel.tabs().length, 1)
 })
