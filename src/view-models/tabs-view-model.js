@@ -142,15 +142,6 @@ export default class TabsViewModel {
     }
   }
 
-  closeSameTabs (tab) {
-    // Close other tabs with same names, only if they are not edited
-    this.tabs().forEach(t => {
-      if (t.name() === tab.name() && !t.dirty()) {
-        this.closeTab(t)
-      }
-    })
-  }
-
   onKeyDown (...args) {
     const event = args[1]
     const activeViewModel = this.activeViewModel()
