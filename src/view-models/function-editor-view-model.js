@@ -44,7 +44,6 @@ export default class FunctionEditorViewModel {
     }
 
     if (!this.socket.connected) {
-      // eslint-disable-next-line no-alert
       this.window.alert([
         'The client tab that this editor was opened from has been',
         'closed.  You must keep that open for saving to work.'
@@ -56,7 +55,6 @@ export default class FunctionEditorViewModel {
       if (response === 'saved') {
         this._code(this.code())
       } else {
-        // eslint-disable-next-line no-alert
         this.window.alert(response)
       }
     })
@@ -69,7 +67,6 @@ export default class FunctionEditorViewModel {
     ].join(' ')
 
     return this.dirty()
-      // eslint-disable-next-line no-alert
       ? this.window.confirm(msg)
       : true
   }

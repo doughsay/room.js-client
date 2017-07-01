@@ -1,4 +1,5 @@
 import ko from 'knockout'
+import SearchResult from '../lib/search-result'
 
 function isElementVisibleIn (el, container) {
   const elRect = el.getBoundingClientRect()
@@ -10,60 +11,6 @@ function isElementVisibleIn (el, container) {
     elRect.bottom <= containerRect.bottom &&
     elRect.right <= containerRect.right
   )
-}
-
-class SearchResult {
-  constructor (data) {
-    this.data = data
-    this.objectId = data.objectId
-    this.active = ko.observable(false)
-    this.name = ko.computed(this.computeName.bind(this))
-  }
-
-  static newFromResult (result) {
-    if (result.function) {
-      // eslint-disable-next-line no-use-before-define
-      return new FunctionSearchResult(result)
-    } else if (result.verb) {
-      // eslint-disable-next-line no-use-before-define
-      return new VerbSearchResult(result)
-    }
-    throw new Error('Invalid result type.')
-  }
-
-  computeName () {
-    throw new Error('Must be subclassed.')
-  }
-
-  openEditor () {
-    throw new Error('Must be subclassed.')
-  }
-}
-
-class FunctionSearchResult extends SearchResult {
-  computeName () {
-    return `${this.objectId}.${this.data.function}`
-  }
-
-  openEditor (socket, tabsViewModel) {
-    const params = { objectId: this.objectId, name: this.data.function }
-    socket.emit('get-function', params, data => {
-      tabsViewModel.newEditFunctionTab(socket, data)
-    })
-  }
-}
-
-class VerbSearchResult extends SearchResult {
-  computeName () {
-    return `${this.objectId}.${this.data.verb}`
-  }
-
-  openEditor (socket, tabsViewModel) {
-    const params = { objectId: this.objectId, name: this.data.verb }
-    socket.emit('get-verb', params, data => {
-      tabsViewModel.newEditVerbTab(socket, data)
-    })
-  }
 }
 
 // TODO: socket permissions
@@ -118,7 +65,7 @@ export default class SearchViewModel {
   onSearch (str) {
     this.socket.emit('search', str, results => {
       this.selectedIndex(0)
-      this.results(results.map(result => SearchResult.newFromResult(result)))
+      this.results(results.map(result => SearchResult.newFromResult(result)).filter(r => r))
     })
   }
 
