@@ -3,9 +3,8 @@
   "version": "2.2.0",
   "description": "Room.js client.",
   "scripts": {
-    "deps": "yarn",
     "build": "./bin/build",
-    "lint": "standard",
+    "lint": "standard | snazzy",
     "test": "nyc ava",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
@@ -40,6 +39,7 @@
     "jsdom-global": "^3.0.2",
     "nyc": "^11.0.3",
     "remap-istanbul": "^0.9.5",
+    "snazzy": "^7.0.0",
     "standard": "^10.0.2",
     "tape": "^4.7.0",
     "uglify-js": "^3.0.20",
