@@ -22,13 +22,12 @@ class SearchResult {
 
   static newFromResult (result) {
     if (result.function) {
-      // eslint-disable-next-line no-use-before-define
       return new FunctionSearchResult(result)
     } else if (result.verb) {
-      // eslint-disable-next-line no-use-before-define
       return new VerbSearchResult(result)
     }
-    throw new Error('Invalid result type.')
+
+    return null
   }
 
   computeName () {
@@ -118,7 +117,7 @@ export default class SearchViewModel {
   onSearch (str) {
     this.socket.emit('search', str, results => {
       this.selectedIndex(0)
-      this.results(results.map(result => SearchResult.newFromResult(result)))
+      this.results(results.map(result => SearchResult.newFromResult(result)).filter(r => r))
     })
   }
 

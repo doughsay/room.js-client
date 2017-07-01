@@ -6,7 +6,7 @@ function register () {
   function init (element, valueAccessor, allBindings) {
     const options = allBindings.get('codemirrorOptions') || {}
     options.value = ko.unwrap(valueAccessor())
-    const editor = CodeMirror(element, options) // eslint-disable-line new-cap
+    const editor = CodeMirror(element, options)
 
     editor.on('change', cm => {
       const value = valueAccessor()

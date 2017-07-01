@@ -68,7 +68,6 @@ export default class VerbEditorViewModel {
     }
 
     if (!this.socket.connected) {
-      // eslint-disable-next-line no-alert
       this.window.alert([
         'The client tab that this editor was opened from has been',
         'closed.  You must keep that open for saving to work.'
@@ -84,7 +83,6 @@ export default class VerbEditorViewModel {
         this._iobjarg(this.iobjarg())
         this._code(this.code())
       } else {
-        // eslint-disable-next-line no-alert
         this.window.alert(response)
       }
     })
@@ -97,7 +95,6 @@ export default class VerbEditorViewModel {
     ].join(' ')
 
     return this.dirty()
-      // eslint-disable-next-line no-alert
       ? this.window.confirm(msg)
       : true
   }
