@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.2.1] - 2017-06-30
 ### Fixed
-- Don't blow up when unknown search result types come from the server (#123)
+- Don't blow up when unknown search result types come from the server ([#123](https://github.com/doughsay/room.js-client/issues/123))
 
 ## [2.2.0] - 2017-06-30
 ### Added
