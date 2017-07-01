@@ -15,9 +15,6 @@ before_script:
   - greenkeeper-lockfile-update
 script:
   - yarn lint
-  - yarn build
-  # fail if build produced changes
-  - git diff-index --quiet HEAD --
   - yarn test
   - yarn codecov
 after_script:
