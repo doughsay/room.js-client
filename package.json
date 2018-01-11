@@ -38,7 +38,7 @@
     "jsdom": "^11.0.0",
     "jsdom-global": "^3.0.2",
     "nyc": "^11.0.3",
-    "remap-istanbul": "^0.9.5",
+    "remap-istanbul": "^0.10.0",
     "snazzy": "^7.0.0",
     "standard": "^10.0.2",
     "tape": "^4.7.0",
