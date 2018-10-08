@@ -35,7 +35,7 @@
     "codecov": "^3.0.0",
     "faucet": "0.0.1",
     "istanbul": "^0.4.5",
-    "jsdom": "^11.0.0",
+    "jsdom": "^12.2.0",
     "jsdom-global": "^3.0.2",
     "nyc": "^11.0.3",
     "remap-istanbul": "^0.9.5",
