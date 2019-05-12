@@ -28,7 +28,7 @@
     "@istanbuljs/nyc-config-babel": "^1.2.2",
     "ava": "^0.21.0",
     "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.0",
+    "babel-loader": "^8.0.6",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-preset-latest": "^6.24.1",
     "babel-register": "^6.24.1",
