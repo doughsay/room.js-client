@@ -18,6 +18,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new UglifyJSPlugin({ comments: false, sourceMap: true })
+    new UglifyJSPlugin({ sourceMap: true })
   ]
 }
